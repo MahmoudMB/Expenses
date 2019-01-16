@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#72a3f2</color>
+
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="bottomToolbar">#f7f7f7</color>
+
+    <color name="fab_add">#72a3f2</color>
+
+
+    <color name="add_activity_tabs_Border">#f97566</color>
+
+<color name="pink">#f97566</color>
+
+    <color name="Add_pink_Category">#fe887c</color>
+
+
+    <color name="expense">#fe7364</color>
+    <color name="income">#39d88b</color>
+
+    <color name="money_income">#13c830</color>
+    <color name="money_expense">#f06c47</color>
+
+
+
+    <color name="TimeLine_Acitve">#71a3f5</color>
+    <color name="TimeLine_InAcitve">#e6e6e6</color>
+
+    <color name="Overlay">#CC7f7f7f</color>
+
+
+    <color name="grey">#cecece</color>
+</resources>

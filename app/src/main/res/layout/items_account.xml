@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+     android:padding="6dp"
+    android:layoutDirection="rtl"
+    android:textDirection="rtl"
+    android:layout_height="wrap_content">
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cecece"
+        ></View>
+
+    <LinearLayout
+        android:layout_marginTop="8dp"
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+        android:gravity="center"
+    android:layout_height="wrap_content">
+
+
+
+    <ImageView
+        android:id="@+id/Account_Icon"
+        android:layout_weight="0.5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_account_balance_24px"
+        android:tint="#515151"
+        />
+
+
+    <TextView
+        android:id="@+id/Account_Name"
+        android:layout_weight="3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="All Account"
+        android:textSize="16sp"
+        android:textColor="#171717"
+
+        />
+
+
+    <ImageView
+        android:id="@+id/Account_Status"
+        android:layout_width="0dp"
+        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_check_circle_24px"
+        android:tint="@color/TimeLine_Acitve"
+
+        />
+
+</LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    android:background="@color/white"
+    tools:context="com.example.mahmoudbahaa.expenses.StatisticsFragment">
+
+
+    <LinearLayout
+        android:id="@+id/Statistics_AccountSpinner"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="جميع الحسابات"
+            android:textSize="19sp"
+            />
+
+        <ImageView
+            android:id="@+id/Statistics_AccountArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_keyboard_arrow_down_24px"
+           android:padding="6dp"
+            android:tag="false"
+            />
+
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+             android:id="@+id/RecyclerLayout"
+        android:layout_below="@+id/Statistics_AccountSpinner"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:layout_height="90dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/Statistics_AccountRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+<LinearLayout
+    android:layout_below="@+id/RecyclerLayout"
+android:id="@+id/ShowLastLayout"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="عرض اخر "
+        android:layout_marginStart="20dp"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="20sp"
+        />
+
+    <LinearLayout
+        android:id="@+id/Statistics_TimeLine"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/timeline_rounded_corner">
+
+        <LinearLayout
+            android:id="@+id/Statistics_TimeLine_days"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/timeline_rounded_corner"
+android:backgroundTint="@color/TimeLine_Acitve"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Statistics_TimeLine_days_Text"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:text="7 ايام"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/Statistics_TimeLine_month"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/timeline_rounded_corner"
+            >
+
+            <TextView
+                android:id="@+id/Statistics_TimeLine_month_Text"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:text="شهر"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+
+                />
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:id="@+id/Statistics_TimeLine_6months"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/timeline_rounded_corner"
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Statistics_TimeLine_6months_Text"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:text="6 اشهر"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+
+                />
+
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/Statistics_TimeLine_year"
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/timeline_rounded_corner">
+
+            <TextView
+                android:id="@+id/Statistics_TimeLine_year_Text"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:text="سنة"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+
+                />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+
+    <RelativeLayout
+    android:layout_below="@+id/ShowLastLayout"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_marginTop="8dp"
+
+        android:id="@+id/Statistics_PieChart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        >
+
+    </com.github.mikephil.charting.charts.PieChart>
+
+
+        <RelativeLayout
+            android:id="@+id/Statistics_Overlay"
+            android:visibility="gone"
+            android:background="@color/Overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
+
+
+</RelativeLayout>
