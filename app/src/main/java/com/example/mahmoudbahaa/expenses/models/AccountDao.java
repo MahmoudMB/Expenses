@@ -1,5 +1,6 @@
 package com.example.mahmoudbahaa.expenses.models;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -17,7 +18,7 @@ import java.util.List;
 public interface AccountDao {
 
     @Query("SELECT * from Account")
-    List<Account> loadAllAccounts();
+    LiveData< List<Account> >loadAllAccounts();
 
 
     @Insert
@@ -28,5 +29,5 @@ public interface AccountDao {
     void deleteAccount(Account account);
 
     @Query("SELECT * FROM Account WHERE id = :id")
-    Account findAccount(int id);
+    LiveData<   Account > findAccount(int id);
 }

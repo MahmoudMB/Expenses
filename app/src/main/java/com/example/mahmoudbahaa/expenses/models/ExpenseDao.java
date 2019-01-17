@@ -1,6 +1,7 @@
 package com.example.mahmoudbahaa.expenses.models;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -20,7 +21,7 @@ public interface ExpenseDao {
 
 
     @Query("SELECT * from Expense Where createdAt BETWEEN :from AND :to ORDER BY createdAt DESC")
-   LiveData< List<Expense>> loadAllExpenses(Long from, Long to);
+    LiveData< List<Expense>> loadAllExpenses(Long from, Long to);
 
 
 
@@ -30,5 +31,8 @@ public interface ExpenseDao {
 
     @Delete
     void deleteExpense(Expense expense);
+
+    @Query("SELECT * FROM EXPENSE WHERE id = :id")
+    LiveData<Expense> loadExpeseById(int id);
 
 }

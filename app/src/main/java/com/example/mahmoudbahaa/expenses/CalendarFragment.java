@@ -162,30 +162,6 @@ List<Expense> expenses = adapter.getExpenses();
 
     }
 
-    void UpdateUi(){
-        AppExecutors.getInstance().diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-
-
-
-
-
-Log.v("excute1","1");
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        Log.v("excute2","2");
-
-
-                    }
-                });
-
-
-            }
-        });
-    }
 
     /**
      * This interface must be implemented by activities that contain this

@@ -1,11 +1,15 @@
 package com.example.mahmoudbahaa.expenses;
 
 import android.app.Activity;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.mahmoudbahaa.expenses.adapters.AccountAdapter;
 import com.example.mahmoudbahaa.expenses.adapters.CategoryAdapter;
@@ -47,24 +51,29 @@ public class EditAccount extends AppCompatActivity implements AccountAdapter.Lis
 
         initAdapter();
 
-        insertDummyAccounts();
+    //    insertDummyAccounts();
 
 
         if (getIntent().hasExtra("Account")) {
             account = (Account) getIntent().getSerializableExtra("Account");
             Select = true;
 
-            if (account != null)
+            if (account != null && accounts.size()>0)
             {
-               int Index =  accounts.indexOf(account);
-               accounts.get(Index).setStatus(true);
-               accounts.get(0).setStatus(false);
-               accountAdapter.notifyDataSetChanged();
+                int Index =  accounts.indexOf(account);
+                accounts.get(Index).setStatus(true);
+                accounts.get(0).setStatus(false);
+                accountAdapter.notifyDataSetChanged();
             }
 
         }
 
+        LoadAccounts();
+
     }
+
+
+
 
 
     void initAdapter(){
@@ -116,6 +125,34 @@ accountAdapter.notifyDataSetChanged();
 
 
 
+    void LoadAccounts()
+    {
+
+        LiveData<List<Account>> c = mDb.accountDao().loadAllAccounts();
+
+        c.observe(this, new Observer<List<Account>>() {
+            @Override
+            public void onChanged(@Nullable List<Account> accounts1) {
+
+                accounts.clear();
+                accounts.addAll(accounts1);
+                accountAdapter.notifyDataSetChanged();
+
+
+                if (account != null)
+                {
+                    int Index =  accounts.indexOf(account);
+                    accounts.get(Index).setStatus(true);
+                    accounts.get(0).setStatus(false);
+                    accountAdapter.notifyDataSetChanged();
+                }
+
+
+
+            }
+        });
+
+    }
 
 
 
@@ -168,6 +205,12 @@ accountAdapter.notifyDataSetChanged();
         startActivity(i);
 
     }
+
+
+
+
+
+
 
 
 

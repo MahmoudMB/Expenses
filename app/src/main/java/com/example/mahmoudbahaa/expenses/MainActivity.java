@@ -3,14 +3,15 @@ package com.example.mahmoudbahaa.expenses;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
@@ -20,6 +21,7 @@ import android.widget.LinearLayout;
 import com.example.mahmoudbahaa.expenses.adapters.ExpenseAdapter;
 import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Expense;
+import com.example.mahmoudbahaa.expenses.models.MainViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,7 +92,6 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
             initCalenderFragment();
             CalenderFragment = true;
 
-
         }
 
         else{
@@ -104,29 +105,28 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
         initDate();
 
 
-        GetExpenses();
+        SetupMainViewModel();
     }
 
 
-    public void GetExpenses(){
+    public void SetupMainViewModel(){
         Long start = getStartOfDayInMillis(myCalendar);
         Long end = getEndOfDayInMillis(start);
-        final LiveData< List<Expense>> expenses1 = mDb.expenseDao().loadAllExpenses(start,end);
+      //  final LiveData< List<Expense>> expenses1 = mDb.expenseDao().loadAllExpenses(start,end);
 
-        expenses1.observe(this, new Observer<List<Expense>>() {
-            @Override
-            public void onChanged(@Nullable List<Expense> expenses) {
-                Log.v("changed eense observer","changed");
+        LiveData<List<Expense>> expenses1   = mDb.expenseDao().loadAllExpenses(start,end);
 
-                Log.v("size",expenses.size()+"");
+expenses1.observe(this, new Observer<List<Expense>>() {
+    @Override
+    public void onChanged(@Nullable List<Expense> expenses) {
+        expensesForFragment.clear();
+        expensesForFragment.addAll(expenses);
+        listener.refreshCalendar(expenses);
+    }
+});
 
-                expensesForFragment.clear();
-                expensesForFragment.addAll(expenses);
-                listener.refreshCalendar(expenses);
 
 
-            }
-        });
 
     }
 
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                GetExpenses();
+                SetupMainViewModel();
 
                 updateLabel();
             }

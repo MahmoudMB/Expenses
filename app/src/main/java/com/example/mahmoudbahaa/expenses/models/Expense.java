@@ -30,11 +30,15 @@ public class Expense implements Parcelable {
 
     private Date createdAt;
 
+    private int accountId;
+    private int categoryId;
+
+
 
 
 
 @Ignore
-    public Expense( String description, String category, String account, String type, float price, Date createdAt,String memo,String imagePath) {
+    public Expense( String description, String category, String account, String type, float price, Date createdAt,String memo,String imagePath,int accountId,int categoryId) {
         this.id = id;
         this.description = description;
         this.category = category;
@@ -44,9 +48,10 @@ public class Expense implements Parcelable {
         this.createdAt = createdAt;
         this.memo = memo;
         this.imagePath = imagePath;
-
+        this.accountId = accountId;
+        this.categoryId = categoryId;
     }
-    public Expense(int id, String description, String category, String account, String type, float price, Date createdAt,String memo,String imagePath) {
+    public Expense(int id, String description, String category, String account, String type, float price, Date createdAt,String memo,String imagePath,int accountId,int categoryId) {
         this.id = id;
         this.description = description;
         this.category = category;
@@ -56,6 +61,8 @@ public class Expense implements Parcelable {
         this.createdAt = createdAt;
         this.memo = memo;
         this.imagePath = imagePath;
+        this.accountId = accountId;
+        this.categoryId = categoryId;
     }
 
     @Ignore
@@ -70,6 +77,22 @@ public class Expense implements Parcelable {
         this.memo = memo;
     }
 
+
+    public int getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
 
     public String getImagePath() {
         return imagePath;
@@ -158,7 +181,8 @@ public class Expense implements Parcelable {
 
 
         dest.writeSerializable(this.createdAt);
-
+        dest.writeInt(this.accountId);
+        dest.writeInt(this.categoryId);
     }
 
     protected Expense(Parcel in) {
@@ -174,7 +198,8 @@ public class Expense implements Parcelable {
 
         createdAt = (java.util.Date) in.readSerializable();
 
-
+        this.accountId =in.readInt();
+        this.categoryId =in.readInt();
     }
 
     public static final Parcelable.Creator<Expense> CREATOR = new Parcelable.Creator<Expense>() {

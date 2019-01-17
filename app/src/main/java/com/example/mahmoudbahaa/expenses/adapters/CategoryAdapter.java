@@ -89,11 +89,21 @@ holder.CategoryName.setText(category.getName());
 
 
 
+
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
+        if (data == null) {
+            return 0;
+        }
         return data.size();
     }
+
+    public void setCategories(List<Category> categories) {
+        this.data = categories;
+        notifyDataSetChanged();
+    }
+
+
 
 
     class MyviewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {

@@ -1,5 +1,6 @@
 package com.example.mahmoudbahaa.expenses.models;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -16,7 +17,15 @@ import java.util.List;
 public interface CategoryDao {
 
     @Query("SELECT * from Category")
-    List<Category> loadAllCategories();
+    LiveData< List<Category>> loadAllCategories();
+
+
+    @Query("SELECT * from Category where type = 'Income'")
+    LiveData< List<Category>> loadIncomesCategories();
+
+
+    @Query("SELECT * from Category where type = 'Outcome'")
+    LiveData< List<Category>> loadOutcomesCategories();
 
 
     @Insert
@@ -28,6 +37,6 @@ public interface CategoryDao {
 
 
     @Query("SELECT * FROM Category WHERE id = :id")
-    Category findCategory(int id);
+    LiveData< Category> findCategory(int id);
 
 }

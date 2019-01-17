@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.mahmoudbahaa.expenses.R;
 import com.example.mahmoudbahaa.expenses.models.Account;
+import com.example.mahmoudbahaa.expenses.models.Category;
 import com.example.mahmoudbahaa.expenses.models.Expense;
 
 import java.util.Collections;
@@ -115,6 +116,14 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
         }
         return data.size();
     }
+
+
+
+    public void setAccounts(List<Account> accounts) {
+        this.data = accounts;
+        notifyDataSetChanged();
+    }
+
 
 
     class MyviewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {

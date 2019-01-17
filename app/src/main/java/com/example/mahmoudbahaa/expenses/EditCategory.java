@@ -1,13 +1,17 @@
 package com.example.mahmoudbahaa.expenses;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -15,6 +19,7 @@ import android.widget.TextView;
 
 import com.example.mahmoudbahaa.expenses.adapters.CategoryAdapter;
 import com.example.mahmoudbahaa.expenses.adapters.ExpenseAdapter;
+import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Category;
 
 import java.util.ArrayList;
@@ -67,14 +72,17 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
 
     Category categoryObj;
 
+    private AppDatabase mDb;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_category);
         ButterKnife.bind(this);
+        mDb = AppDatabase.getsInstance(getApplicationContext());
+
         setTimeLineClick(0);
         initAdapters();
-        initInsertDummydata();
+       // initInsertDummydata();
 
 
 
@@ -89,30 +97,33 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
             switch (category){
             case "Outcome":
 
-                if (categoryObj != null)
+                if (categoryObj != null && OutComes.size()>0)
                 {
                     int Index =  OutComes.indexOf(categoryObj);
-                    OutComes.get(Index).setStatus(true);
                     OutComes.get(0).setStatus(false);
+                    OutComes.get(Index).setStatus(true);
                     OutComeAdapter.notifyDataSetChanged();
                 }
 
                 break;
 
             case "Income":
-                if (categoryObj != null)
+                if (categoryObj != null && Incomes.size() > 0)
                 {
                     int Index =  Incomes.indexOf(categoryObj);
-                    Incomes.get(Index).setStatus(true);
                     Incomes.get(0).setStatus(false);
+                    Incomes.get(Index).setStatus(true);
+
                     IncomeAdapter.notifyDataSetChanged();
                 }
                 break;
 
             }
 
-        }
 
+
+        }
+        LoadCategories();
 
     }
 
@@ -129,6 +140,8 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
 
 
     }
+
+
     public  void enableDisableView(View view, boolean enabled) {
 
 
@@ -153,6 +166,74 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
     @OnClick(R.id.Add_Income)
     void OnInComeClick() {
         setTimeLineClick(1);
+    }
+
+
+
+
+
+    void LoadCategories()
+    {
+
+        LiveData<List<Category>> c = mDb.categoryDao().loadIncomesCategories();
+
+        c.observe(this, new Observer<List<Category>>() {
+            @Override
+            public void onChanged(@Nullable List<Category> categories) {
+
+                Log.v("categoriesIncome",categories.size()+"");
+                Incomes.clear();
+                Incomes.addAll(categories);
+                IncomeAdapter.notifyDataSetChanged();
+
+
+
+                if (categoryObj != null)
+                {
+                    if (categoryObj.getType().equals("Income")){
+                        int Index =  Incomes.indexOf(categoryObj);
+                        Incomes.get(0).setStatus(false);
+
+                        Incomes.get(Index).setStatus(true);
+                        IncomeAdapter.notifyDataSetChanged();
+                    }
+                }
+
+
+
+            }
+        });
+
+
+        LiveData<List<Category>> a = mDb.categoryDao().loadOutcomesCategories();
+
+        a.observe(this, new Observer<List<Category>>() {
+            @Override
+            public void onChanged(@Nullable List<Category> categories) {
+
+                OutComes.clear();
+                OutComes.addAll(categories);
+                OutComeAdapter.notifyDataSetChanged();
+
+                Log.v("categoriesOutome",categories.size()+"");
+
+
+                if (categoryObj != null)
+                {
+                    if (categoryObj.getType().equals("Outcome")){
+                    int Index =  OutComes.indexOf(categoryObj);
+                        OutComes.get(0).setStatus(false);
+
+                        OutComes.get(Index).setStatus(true);
+                    OutComeAdapter.notifyDataSetChanged();
+                    }
+                }
+
+
+            }
+        });
+
+
     }
 
 

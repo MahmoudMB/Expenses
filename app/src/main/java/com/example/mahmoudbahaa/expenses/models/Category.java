@@ -28,17 +28,16 @@ public class Category implements Serializable {
         this.name = name;
         this.icon = icon;
         this.type = type;
-
+      this.setStatus(false);
     }
 
 
     @Ignore
-    public Category(String name, String icon, String type, Boolean status) {
+    public Category(String name, String icon, String type) {
 
         this.name = name;
         this.icon = icon;
         this.type = type;
-        Status = status;
     }
 
     @Ignore

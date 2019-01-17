@@ -2,6 +2,8 @@ package com.example.mahmoudbahaa.expenses;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
@@ -13,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -48,6 +51,7 @@ import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -191,12 +195,20 @@ String FileName = "";
 
         if (getIntent().hasExtra("Expense"))
         {
-expense = (Expense) getIntent().getSerializableExtra("Expense");
+
+
+
+             getAccount();
+             getCategory();
+
+             expense = (Expense) getIntent().getSerializableExtra("Expense");
+
+            getAccount();
+            getCategory();
 
             initFields();
 
             myCalendar.setTimeInMillis(expense.getCreatedAt().getTime());
-
 
         }
 
@@ -207,7 +219,35 @@ expense = (Expense) getIntent().getSerializableExtra("Expense");
 
 
 
+   void getAccount()
+   {
+       LiveData<Account> account1   = mDb.accountDao().findAccount(expense.getAccountId());
 
+       account1.observe(this, new Observer<Account>() {
+           @Override
+           public void onChanged(@Nullable Account account1) {
+               account = account1;
+
+               AccountText.setText(account.getName());
+           }
+       });
+
+   }
+
+
+    void getCategory()
+    {
+        LiveData<Category> category1   = mDb.categoryDao().findCategory(expense.getCategoryId());
+
+        category1.observe(this, new Observer<Category>() {
+            @Override
+            public void onChanged(@Nullable Category category1) {
+                category = category1;
+
+                CategoryText.setText(category.getName());
+
+            }
+        });    }
 
 
    void initFields()
@@ -261,10 +301,10 @@ Price.setText(expense.getPrice()+"");
     }
 
 
-       AccountText.setText(account.getName());
+    //   AccountText.setText(account.getName());
        //ForAccountImage --------
 
-       CategoryText.setText(category.getName());
+     //  CategoryText.setText(category.getName());
        //ForCategoryIcon -----
 
 
@@ -384,7 +424,7 @@ Price.setText(expense.getPrice()+"");
 
 
 
-    final    Expense expense = new Expense(Description, Category, account, Type, price, myCalendar.getTime(),Memo,FinalImagePath);
+    final    Expense expense = new Expense(Description, Category, account, Type, price, myCalendar.getTime(),Memo,FinalImagePath,1,1);
 
 AppExecutors.getInstance().diskIO().execute(new Runnable() {
     @Override

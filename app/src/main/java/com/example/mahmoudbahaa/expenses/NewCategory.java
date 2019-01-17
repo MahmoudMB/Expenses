@@ -4,9 +4,14 @@ import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.mahmoudbahaa.expenses.data.AppDatabase;
+import com.example.mahmoudbahaa.expenses.models.Category;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +34,13 @@ public class NewCategory extends AppCompatActivity {
     TextView Add_Income_Text;
 
 
+    @BindView(R.id.EditCategory_name)
+    EditText CategoryName;
+
+    String categoryType = "Outcome";
+
+
+    private AppDatabase mDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +48,7 @@ public class NewCategory extends AppCompatActivity {
         setContentView(R.layout.activity_new_category);
         ButterKnife.bind(this);
         setTimeLineClick(0);
+        mDb = AppDatabase.getsInstance(getApplicationContext());
 
     }
 
@@ -44,14 +57,15 @@ public class NewCategory extends AppCompatActivity {
     @OnClick(R.id.Add_OutCome)
     void OnOutComeClick() {
         setTimeLineClick(0);
+        categoryType = "Outcome";
     }
 
 
     @OnClick(R.id.Add_Income)
     void OnInComeClick() {
         setTimeLineClick(1);
+        categoryType = "Income";
     }
-
 
 
 
@@ -110,6 +124,32 @@ public class NewCategory extends AppCompatActivity {
 
         }
 
+
+    }
+
+
+
+    @OnClick(R.id.NewCategory_Done)
+    void addNewCategory(){
+
+        final String categoryName = CategoryName.getText().toString();
+        if (TextUtils.isEmpty(categoryName))
+        {
+
+        }
+        else{
+
+            final Category category = new Category(categoryName,"ic_baseline_account_balance_24px",categoryType);
+
+            AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mDb.categoryDao().insertCategory(category);
+                    finish();
+
+                }
+            });
+        }
 
     }
 

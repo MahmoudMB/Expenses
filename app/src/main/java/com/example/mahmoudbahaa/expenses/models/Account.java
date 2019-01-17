@@ -26,14 +26,14 @@ public class Account implements Serializable{
         this.id = id;
         this.name = name;
         this.icon = icon;
+        this.setStatus(false);
     }
 
 
 @Ignore
-    public Account( String name, String icon, Boolean status) {
+    public Account( String name, String icon) {
         this.name = name;
         this.icon = icon;
-        Status = status;
     }
 
 
