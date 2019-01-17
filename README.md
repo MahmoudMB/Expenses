@@ -1,9 +1,4 @@
 
-https://github.com/MahmoudMB/TalentProject
-
-https://github.com/MahmoudMB/Expenses
-
-
 
 Expenses App.
 
@@ -14,6 +9,7 @@ Expenses App.
 
 
 <img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/3.png"/>
+
 <img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/5.png"/>
 
 
