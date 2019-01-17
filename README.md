@@ -14,3 +14,7 @@ Expenses App.
 
 
 <img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/4.png"/>
+
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/6.png"/>
+
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/7.png"/>
