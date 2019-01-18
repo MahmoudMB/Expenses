@@ -170,12 +170,18 @@ String FileName = "";
     Expense expense;
 
 
+    Category categoryIncome;
+    Category categoryOutcome;
+
+
     @BindView(R.id.AddActivity_CategoryText)
     TextView CategoryText;
 
 
     @BindView(R.id.AddActivity_AccountText)
     TextView AccountText;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,25 +198,90 @@ String FileName = "";
         PhotoLayout.setVisibility(View.GONE);
         MemoLayout.setVisibility(View.GONE);
 
-
-        if (getIntent().hasExtra("Expense"))
-        {
-
+   if (savedInstanceState==null) {
+    if (getIntent().hasExtra("Expense")) {
 
 
-             getAccount();
-             getCategory();
+        expense = (Expense) getIntent().getParcelableExtra("Expense");
 
-             expense = (Expense) getIntent().getSerializableExtra("Expense");
+        getAccount();
+        getCategory();
 
-            getAccount();
-            getCategory();
+        initFields();
 
-            initFields();
+        myCalendar.setTimeInMillis(expense.getCreatedAt().getTime());
 
-            myCalendar.setTimeInMillis(expense.getCreatedAt().getTime());
+    } else {
+        GetDefaultAccount();
+        GetDefaultCategory();
+    }
+}
 
-        }
+else {
+
+ if (getIntent().hasExtra("Expense")){
+
+     expense = (Expense) getIntent().getParcelableExtra("Expense");
+
+
+     myCalendar.setTimeInMillis(expense.getCreatedAt().getTime());
+
+ }
+
+ account = (Account) savedInstanceState.getSerializable("Account");
+ categoryIncome = (Category) savedInstanceState.getSerializable("categoryIncome");
+ categoryOutcome = (Category) savedInstanceState.getSerializable("categoryOutcome") ;
+ Type = savedInstanceState.getString("Type");
+    myCalendar.setTimeInMillis(savedInstanceState.getLong("Date"));
+
+    Memo = savedInstanceState.getString("Memo");
+    FinalImagePath = savedInstanceState.getString("FinalImagePath");
+
+
+    if (Type.equals("Income"))
+    {
+        setTimeLineClick(1);
+        Type = "Income";
+        CategoryText.setText(categoryIncome.getName());
+
+    }
+    else{
+        setTimeLineClick(0);
+        Type  = "Outcome";
+        CategoryText.setText(categoryOutcome.getName());
+    }
+
+    AccountText.setText(account.getName());
+
+
+
+
+    if (!TextUtils.isEmpty(Memo))
+    {
+        MemoLayout.setVisibility(View.VISIBLE);
+        AddMemo.setVisibility(View.GONE);
+        MemoText.setText(Memo);
+    }
+
+
+
+
+    if (!TextUtils.isEmpty(FinalImagePath))
+    {
+
+        Glide.with(getApplicationContext())
+                .load(new File(FinalImagePath)).apply(new RequestOptions().centerCrop()).into(PhotoImage);
+
+        PhotoLayout.setVisibility(View.VISIBLE);
+        AddPhoto.setVisibility(View.GONE);
+
+    }
+
+
+}
+
+
+
 
         updateLabel();
 
@@ -218,15 +289,28 @@ String FileName = "";
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
 
-   void getAccount()
+        outState.putSerializable("Account",account);
+        outState.putSerializable("categoryIncome",categoryIncome);
+        outState.putSerializable("categoryOutcome",categoryOutcome);
+        outState.putString("Type",Type);
+        outState.putLong("Date",myCalendar.getTimeInMillis());
+        outState.putString("FinalImagePath",FinalImagePath);
+        outState.putString("Memo",Memo);
+
+    }
+
+    void getAccount()
    {
-       LiveData<Account> account1   = mDb.accountDao().findAccount(expense.getAccountId());
+     final  LiveData<Account> account1   = mDb.accountDao().findAccount(expense.getAccountId());
 
        account1.observe(this, new Observer<Account>() {
            @Override
-           public void onChanged(@Nullable Account account1) {
-               account = account1;
+           public void onChanged(@Nullable Account account2) {
+               account = account2;
 
                AccountText.setText(account.getName());
            }
@@ -242,13 +326,87 @@ String FileName = "";
         category1.observe(this, new Observer<Category>() {
             @Override
             public void onChanged(@Nullable Category category1) {
+
+
                 category = category1;
 
-                CategoryText.setText(category.getName());
+                if (category1.getType().equals("Income"))
+                {
+                    categoryIncome = category1;
+                }
+                else if (category1.getType().equals("Outcome"))
+                {
+                    categoryOutcome = category1;
+                }
+
+                CategoryText.setText(category1.getName());
+
 
             }
         });    }
 
+
+
+
+
+        void GetDefaultAccount(){
+
+            LiveData<Account> account1   = mDb.accountDao().LoadDefaultAccount(true);
+
+            account1.observe(this, new Observer<Account>() {
+                @Override
+                public void onChanged(@Nullable Account account1) {
+                    account = account1;
+
+                    AccountText.setText(account.getName());
+                }
+            });
+
+        }
+
+
+        void GetDefaultCategory(){
+
+            LiveData<Category> category1   = mDb.categoryDao().LoadDefaultIncome(true);
+
+            category1.observe(this, new Observer<Category>() {
+                @Override
+                public void onChanged(@Nullable Category category1) {
+              //      category = category1;
+
+                //    CategoryText.setText(category.getName());
+
+                    categoryIncome = category1;
+
+                    if (Type.equals("Income"))
+                        CategoryText.setText(categoryIncome.getName());
+
+
+                }
+            });
+
+
+
+            LiveData<Category> category2  = mDb.categoryDao().LoadDefaultOutCome(true);
+
+            category2.observe(this, new Observer<Category>() {
+                @Override
+                public void onChanged(@Nullable Category category1) {
+                    //      category = category1;
+
+                    //    CategoryText.setText(category.getName());
+
+                    categoryOutcome = category1;
+
+                    if (Type.equals("Outcome"))
+                        CategoryText.setText(categoryOutcome.getName());
+
+
+
+                }
+            });
+
+        }
 
    void initFields()
    {
@@ -269,6 +427,7 @@ String FileName = "";
            }
            else{
                setTimeLineClick(0);
+               Type  = "Outcome";
            }
 
        }
@@ -328,6 +487,16 @@ Price.setText(expense.getPrice()+"");
         i.putExtra("Type",Type);
         i.putExtra("Category",category);
 
+        if (Type.equals("Outcome"))
+            i.putExtra("Category",categoryOutcome);
+        else if (Type.equals("Income"))
+            i.putExtra("Category",categoryIncome);
+
+
+
+        i.putExtra("ScreenType","Add");
+
+
         startActivityForResult(i,500);
     }
 
@@ -336,6 +505,9 @@ Price.setText(expense.getPrice()+"");
     void onAccountChange(){
         Intent i = new Intent(AddActivity.this,EditAccount.class);
         i.putExtra("Account",account);
+        i.putExtra("ScreenType","Add");
+        i.putExtra("a","a");
+
         startActivityForResult(i,600);
     }
 
@@ -386,6 +558,7 @@ Price.setText(expense.getPrice()+"");
     void OnOutComeClick() {
         setTimeLineClick(0);
         Type = "Outcome";
+        CategoryText.setText(categoryOutcome.getName());
 
     }
 
@@ -394,6 +567,8 @@ Price.setText(expense.getPrice()+"");
     void OnInComeClick() {
         setTimeLineClick(1);
         Type = "Income";
+        CategoryText.setText(categoryIncome.getName());
+
     }
 
 
@@ -414,8 +589,6 @@ Price.setText(expense.getPrice()+"");
         float price = Float.parseFloat(this.Price.getText().toString());
 
 
-         String Category = "بقالة";
-         String account = "الاساسي";
 
          String Type = this.Type;
 
@@ -423,18 +596,31 @@ Price.setText(expense.getPrice()+"");
        Log.v("dateadded",myCalendar.getTime()+"");
 
 
+if (Type.equals("Income")) {
+    final Expense expense = new Expense(Description, categoryIncome.getName(), account.getName(), Type, price, myCalendar.getTime(), Memo, FinalImagePath, account.getId(), categoryIncome.getId());
 
-    final    Expense expense = new Expense(Description, Category, account, Type, price, myCalendar.getTime(),Memo,FinalImagePath,1,1);
+    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        @Override
+        public void run() {
+            mDb.expenseDao().insertExpense(expense);
+            finish();
 
-AppExecutors.getInstance().diskIO().execute(new Runnable() {
-    @Override
-    public void run() {
-        mDb.expenseDao().insertExpense(expense);
-        finish();
+        }
+    });
+}
 
-    }
-});
+            if (Type.equals("Outcome")) {
+                final Expense expense = new Expense(Description, categoryOutcome.getName(), account.getName(), Type, price, myCalendar.getTime(), Memo, FinalImagePath, account.getId(), categoryOutcome.getId());
 
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb.expenseDao().insertExpense(expense);
+                        finish();
+
+                    }
+                });
+            }
 
 
         }
@@ -675,8 +861,15 @@ break;
 
                 if (resultCode == RESULT_OK) {
                     Category category = (Category) data.getSerializableExtra("Category");
-                    this.category = category;
-                    CategoryText.setText(this.category.getName());
+
+                    if (category.getType().equals("Outcome"))
+                        this.categoryOutcome = category;
+                    else
+                        this.categoryIncome = category;
+
+
+
+                    CategoryText.setText(category.getName());
                 }
                 break;
 

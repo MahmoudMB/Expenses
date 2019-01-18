@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.mahmoudbahaa.expenses.adapters.CategoryAdapter;
@@ -71,6 +72,12 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
     String category = "";
 
     Category categoryObj;
+String ScreenType = "";
+
+
+
+   Boolean FirstRun = true;
+
 
     private AppDatabase mDb;
     @Override
@@ -78,6 +85,12 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_category);
         ButterKnife.bind(this);
+        FirstRun = true;
+
+        if (savedInstanceState!=null)
+       FirstRun =    savedInstanceState.getBoolean("FirstRun");
+
+
         mDb = AppDatabase.getsInstance(getApplicationContext());
 
         setTimeLineClick(0);
@@ -89,6 +102,7 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
         if (getIntent().hasExtra("Type")) {
             Select = true;
             category = getIntent().getStringExtra("Type");
+            ScreenType = getIntent().getStringExtra("ScreenType");
             categoryObj = (Category) getIntent().getSerializableExtra("Category");
 
             initCategoryAsSelect(category);
@@ -180,7 +194,6 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
         c.observe(this, new Observer<List<Category>>() {
             @Override
             public void onChanged(@Nullable List<Category> categories) {
-
                 Log.v("categoriesIncome",categories.size()+"");
                 Incomes.clear();
                 Incomes.addAll(categories);
@@ -190,11 +203,11 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
 
                 if (categoryObj != null)
                 {
-                    if (categoryObj.getType().equals("Income")){
-                        int Index =  Incomes.indexOf(categoryObj);
-                        Incomes.get(0).setStatus(false);
+                    if (categoryObj.getType().equals("Income") && FirstRun){
 
+                        int Index =  Incomes.indexOf(categoryObj);
                         Incomes.get(Index).setStatus(true);
+
                         IncomeAdapter.notifyDataSetChanged();
                     }
                 }
@@ -218,17 +231,14 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
                 Log.v("categoriesOutome",categories.size()+"");
 
 
-                if (categoryObj != null)
+                if (categoryObj != null && FirstRun)
                 {
                     if (categoryObj.getType().equals("Outcome")){
                     int Index =  OutComes.indexOf(categoryObj);
-                        OutComes.get(0).setStatus(false);
-
                         OutComes.get(Index).setStatus(true);
                     OutComeAdapter.notifyDataSetChanged();
                     }
                 }
-
 
             }
         });
@@ -394,57 +404,123 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
     public void onListItemClick(int clickedItemIndex) {
 
 
-        if (Select)
-        {
-
-            Intent data = new Intent();
-            if (category.equals("Outcome")) {
-                // add data to Intent
-                data.putExtra("Category", OutComes.get(clickedItemIndex));
+        FirstRun = false;
 
 
-                if (categoryObj!=null){
-                    int Index =  OutComes.indexOf(categoryObj);
+        if (Select) {
 
-                    OutComes.get(Index).setStatus(false);
-                }
-                else
-                OutComes.get(0).setStatus(false);
+            switch (ScreenType) {
 
-                OutComes.get(clickedItemIndex).setStatus(true);
-                OutComeAdapter.notifyDataSetChanged();
+                case "General":
+
+                    if (category.equals("Outcome")) {
+                        if (!categoryObj.equals(OutComes.get(clickedItemIndex))) {
+
+
+
+                            int index = OutComes.indexOf(categoryObj);
+                            OutComes.get(index).setDefaultCategory(false);
+                            OutComes.get(clickedItemIndex).setDefaultCategory(true);
+
+                            OutComes.get(index).setStatus(false);
+                            OutComes.get(clickedItemIndex).setStatus(true);
+
+                            OutComeAdapter.notifyDataSetChanged();
+                            changeCategory(OutComes.get(index));
+                            changeCategory(OutComes.get(clickedItemIndex));
+                            finish();
+                        }
+                        finish();
+
+                    } else if (category.equals("Income")) {
+
+                        if (!categoryObj.equals(Incomes.get(clickedItemIndex))) {
+                            int index = Incomes.indexOf(categoryObj);
+                            Incomes.get(index).setDefaultCategory(false);
+                            Incomes.get(clickedItemIndex).setDefaultCategory(true);
+
+
+                            Incomes.get(index).setStatus(false);
+                            Incomes.get(clickedItemIndex).setStatus(true);
+
+
+                            IncomeAdapter.notifyDataSetChanged();
+
+                            changeCategory(Incomes.get(index));
+                            changeCategory(Incomes.get(clickedItemIndex));
+
+                            finish();
+                        }
+                        finish();
+                    }
+
+
+                    break;
+
+                case "Add":
+                    Intent data = new Intent();
+
+
+                    if (category.equals("Outcome")) {
+                        if (!categoryObj.equals(OutComes.get(clickedItemIndex))) {
+
+
+                            int index = OutComes.indexOf(categoryObj);
+                            OutComes.get(index).setStatus(false);
+                            OutComes.get(clickedItemIndex).setStatus(true);
+                            OutComeAdapter.notifyDataSetChanged();
+
+                        }
+                        data.putExtra("Category", OutComes.get(clickedItemIndex));
+
+                        setResult(Activity.RESULT_OK, data);
+
+                        finish();
+
+                    } else if (category.equals("Income")) {
+
+                        if (!categoryObj.equals(Incomes.get(clickedItemIndex))) {
+
+
+                            int index = Incomes.indexOf(categoryObj);
+                            Incomes.get(index).setStatus(false);
+                            Incomes.get(clickedItemIndex).setStatus(true);
+                            IncomeAdapter.notifyDataSetChanged();
+
+
+                        }
+
+                        data.putExtra("Category", Incomes.get(clickedItemIndex));
+
+                        setResult(Activity.RESULT_OK, data);
+                        finish();
+                    }
+
+
+                    break;
+
+
             }
 
-            else {
-
-                data.putExtra("Category", Incomes.get(clickedItemIndex));
-
-                if (categoryObj!=null){
-                    int Index =  Incomes.indexOf(categoryObj);
-
-                    Incomes.get(Index).setStatus(false);
-                }
-                else
-                    Incomes.get(0).setStatus(false);
-
-
-
-                Incomes.get(clickedItemIndex).setStatus(true);
-
-                IncomeAdapter.notifyDataSetChanged();
-
-            }
-
-
-
-            setResult(Activity.RESULT_OK, data);
-
-            finish();
 
         }
+    }
 
+
+
+    void changeCategory(final Category c){
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.categoryDao().UpdateCategory(c);
+
+            }
+        });
 
     }
+
+
 
 
     @OnClick(R.id.EditCategory_Back)
@@ -452,4 +528,10 @@ public class EditCategory extends AppCompatActivity implements CategoryAdapter.L
         finish();
     }
 
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("FirstRun",FirstRun);
+    }
 }

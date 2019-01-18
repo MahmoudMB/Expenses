@@ -20,17 +20,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="0.1"
-            android:background="@android:color/white"
             android:orientation="vertical">
 
 
             <LinearLayout
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:layout_marginTop="10dp"
+            android:paddingTop="8dp"
+                android:paddingBottom="8dp"
                 android:id="@+id/Main_dateLayout"
                 >
 
@@ -78,7 +79,7 @@
 <FrameLayout
     android:layout_width="match_parent"
     android:id="@+id/Main_FragmentContainer"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
 </FrameLayout>
 

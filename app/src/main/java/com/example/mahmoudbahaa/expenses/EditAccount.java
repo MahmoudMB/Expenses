@@ -37,8 +37,10 @@ public class EditAccount extends AppCompatActivity implements AccountAdapter.Lis
 
 
 
-    Account account;
+    Account accountObj;
     Boolean Select = false;
+    String ScreenType = "";
+    Boolean FirstRun = true;
 
     private AppDatabase mDb;
 
@@ -47,6 +49,12 @@ public class EditAccount extends AppCompatActivity implements AccountAdapter.Lis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_account);
         ButterKnife.bind(this);
+        FirstRun = true;
+
+        if (savedInstanceState!=null)
+            FirstRun =    savedInstanceState.getBoolean("FirstRun");
+
+
         mDb = AppDatabase.getsInstance(getApplicationContext());
 
         initAdapter();
@@ -55,12 +63,13 @@ public class EditAccount extends AppCompatActivity implements AccountAdapter.Lis
 
 
         if (getIntent().hasExtra("Account")) {
-            account = (Account) getIntent().getSerializableExtra("Account");
+            accountObj = (Account) getIntent().getSerializableExtra("Account");
             Select = true;
+            ScreenType = getIntent().getStringExtra("ScreenType");
 
-            if (account != null && accounts.size()>0)
+            if (accountObj != null && accounts.size()>0)
             {
-                int Index =  accounts.indexOf(account);
+                int Index =  accounts.indexOf(accountObj);
                 accounts.get(Index).setStatus(true);
                 accounts.get(0).setStatus(false);
                 accountAdapter.notifyDataSetChanged();
@@ -139,13 +148,18 @@ accountAdapter.notifyDataSetChanged();
                 accountAdapter.notifyDataSetChanged();
 
 
-                if (account != null)
+
+                if (accountObj != null)
                 {
-                    int Index =  accounts.indexOf(account);
-                    accounts.get(Index).setStatus(true);
-                    accounts.get(0).setStatus(false);
-                    accountAdapter.notifyDataSetChanged();
+                    if (FirstRun){
+
+                        int Index =  accounts.indexOf(accountObj);
+                        accounts.get(Index).setStatus(true);
+
+                        accountAdapter.notifyDataSetChanged();
+                    }
                 }
+
 
 
 
@@ -159,36 +173,74 @@ accountAdapter.notifyDataSetChanged();
     @Override
     public void onListItemClick(int clickedItemIndex) {
 
+        FirstRun = false;
+
+
         if (Select)
         {
 
-            Intent data = new Intent();
+            switch (ScreenType){
+
+                case "General":
+
+                        if (!accountObj.equals(accounts.get(clickedItemIndex))) {
+
+                            int index = accounts.indexOf(accountObj);
+                            accounts.get(index).setDefaultAccount(false);
+                            accounts.get(clickedItemIndex).setDefaultAccount(true);
+
+                            accounts.get(index).setStatus(false);
+                            accounts.get(clickedItemIndex).setStatus(true);
+
+                            accountAdapter.notifyDataSetChanged();
+
+                            changeAccount(accounts.get(index));
+                            changeAccount(accounts.get(clickedItemIndex));
+                            finish();
+                        }
+
+                    finish();
+                    break;
+
+                case "Add":
+                    Intent data = new Intent();
+
+                        if (!accountObj.equals(accounts.get(clickedItemIndex))) {
+
+                            int index = accounts.indexOf(accountObj);
+                            accounts.get(index).setStatus(false);
+                            accounts.get(clickedItemIndex).setStatus(true);
+                            accountAdapter.notifyDataSetChanged();
+
+                        }
+                        data.putExtra("Account", accounts.get(clickedItemIndex));
+
+                        setResult(Activity.RESULT_OK, data);
+
+                        finish();
 
 
-                data.putExtra("Account", accounts.get(clickedItemIndex));
+                    break;
 
-            if (account!=null){
-                int Index =  accounts.indexOf(account);
 
-                accounts.get(Index).setStatus(false);
+
             }
-            else
-                accounts.get(0).setStatus(false);
 
 
-            accounts.get(clickedItemIndex).setStatus(true);
-            accountAdapter.notifyDataSetChanged();
-
-            setResult(Activity.RESULT_OK, data);
-
-            finish();
 
         }
 
 
+    }
 
+    void changeAccount(final Account c){
 
-
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.accountDao().UpdateAccount(c);
+            }
+        });
 
     }
 
@@ -210,7 +262,11 @@ accountAdapter.notifyDataSetChanged();
 
 
 
-
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("FirstRun",FirstRun);
+    }
 
 
 

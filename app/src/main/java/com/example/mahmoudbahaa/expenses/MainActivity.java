@@ -116,19 +116,22 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
 
         LiveData<List<Expense>> expenses1   = mDb.expenseDao().loadAllExpenses(start,end);
 
-expenses1.observe(this, new Observer<List<Expense>>() {
-    @Override
-    public void onChanged(@Nullable List<Expense> expenses) {
-        expensesForFragment.clear();
-        expensesForFragment.addAll(expenses);
-        listener.refreshCalendar(expenses);
-    }
-});
 
 
+            expenses1.observe(this, new Observer<List<Expense>>() {
+                @Override
+                public void onChanged(@Nullable List<Expense> expenses) {
+                    expensesForFragment.clear();
+                    expensesForFragment.addAll(expenses);
+                    if (CalenderFragment)
+                    listener.refreshCalendar(expenses);
+                }
+            });
 
 
-    }
+        }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -323,6 +326,30 @@ expenses1.observe(this, new Observer<List<Expense>>() {
 
     @OnClick(R.id.Main_Settings)
     void OpenSettingsFragment(){
+
+        Bundle bundle = new Bundle();
+
+        //   String ChatsType = "All";
+     //   Long start = getStartOfDayInMillis(myCalendar);
+     //   Long end = getEndOfDayInMillis(start);
+      //  bundle.putLong("start",start);
+      //  bundle.putLong("end",end);
+
+       // bundle.putParcelableArrayList("expenses",expensesForFragment);
+
+        SettingsFragment f = new SettingsFragment();
+        f.setArguments(bundle);
+
+     //   setListener(f);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.Main_FragmentContainer, f)
+                .commit();
+
+
+
         MainDateLayout.setVisibility(View.GONE);
         CalenderFragment = false;
     }

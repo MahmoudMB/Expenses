@@ -52,4 +52,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version" // use kapt for Kotlin
 
 
+    implementation 'net.danlew:android.joda:2.10.1.1'
+
+
 }

@@ -6,7 +6,6 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
-    android:background="@color/white"
     tools:context="com.example.mahmoudbahaa.expenses.StatisticsFragment">
 
 
@@ -15,6 +14,7 @@
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center"
+        android:background="@color/white"
         android:layout_height="wrap_content">
 
 
@@ -40,7 +40,8 @@
 
 
     <LinearLayout
-             android:id="@+id/RecyclerLayout"
+        android:background="@color/white"
+        android:id="@+id/RecyclerLayout"
         android:layout_below="@+id/Statistics_AccountSpinner"
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -58,6 +59,9 @@
     </LinearLayout>
 
 <LinearLayout
+
+    android:layout_marginTop="14dp"
+    android:background="@color/white"
     android:layout_below="@+id/RecyclerLayout"
 android:id="@+id/ShowLastLayout"
     android:layout_width="match_parent"
@@ -187,6 +191,7 @@ android:backgroundTint="@color/TimeLine_Acitve"
 
 
     <RelativeLayout
+        android:background="@color/white"
     android:layout_below="@+id/ShowLastLayout"
 
     android:layout_width="match_parent"

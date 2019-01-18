@@ -22,22 +22,26 @@ public class Category implements Serializable {
     @Ignore
     private Boolean Status;
 
+    private Boolean defaultCategory;
 
-    public Category(int id, String name, String icon, String type) {
+
+    public Category(int id, String name, String icon, String type,Boolean defaultCategory) {
         this.id = id;
         this.name = name;
         this.icon = icon;
         this.type = type;
       this.setStatus(false);
+      this.defaultCategory = defaultCategory;
     }
 
 
     @Ignore
-    public Category(String name, String icon, String type) {
+    public Category(String name, String icon, String type,Boolean defaultCategory) {
 
         this.name = name;
         this.icon = icon;
         this.type = type;
+        this.defaultCategory = defaultCategory;
     }
 
     @Ignore
@@ -46,8 +50,13 @@ public class Category implements Serializable {
     }
 
 
+    public Boolean getDefaultCategory() {
+        return defaultCategory;
+    }
 
-
+    public void setDefaultCategory(Boolean defaultCategory) {
+        this.defaultCategory = defaultCategory;
+    }
 
     public Boolean getStatus() {
         return Status;
@@ -103,6 +112,15 @@ public class Category implements Serializable {
     @Override
     public int hashCode() {
         return id;
+    }
+
+
+
+    public static Category[] populateData() {
+        return new Category[] {
+                new Category("اخرى", "ic_baseline_account_balance_24px", "Outcome",true),
+                new Category("اخرى", "ic_baseline_account_balance_24px", "Income",true)
+        };
     }
 
 

@@ -3,6 +3,7 @@ package com.example.mahmoudbahaa.expenses;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -74,7 +75,9 @@ public class CalendarFragment extends Fragment implements ExpenseAdapter.ListIte
 
          //   start = getArguments().getLong("start");
           //  end = getArguments().getLong("end");
-            expenses = getArguments().getParcelableArrayList("expenses");
+            List<Expense> es = getArguments().getParcelableArrayList("expenses");
+            if (es!=null)
+            expenses.addAll(es);
         }
     }
 
@@ -89,11 +92,10 @@ public class CalendarFragment extends Fragment implements ExpenseAdapter.ListIte
 Log.v("create","createCalender");
 
         initRecyclerView();
-      //  dummeyData();
+        adapter.notifyDataSetChanged();
 
+        //  dummeyData();
 
-
-adapter.setExpenses(expenses);
 
 
         new ItemTouchHelper(new ItemTouchHelper.Callback() {
@@ -150,15 +152,23 @@ List<Expense> expenses = adapter.getExpenses();
     @Override
     public void onListItemClick(int clickedItemIndex) {
 
+
+        Intent i = new Intent(getActivity(),AddActivity.class);
+Log.v("expensesSize",expenses.size()+"");
+        i.putExtra("Expense",expenses.get(clickedItemIndex));
+
+        startActivity(i);
+
+
     }
 
     @Override
-    public void refreshCalendar(List<Expense> expenses) {
+    public void refreshCalendar(List<Expense> expenses1) {
 
 
-
-        adapter.setExpenses(expenses);
-
+expenses.clear();
+expenses.addAll(expenses1);
+adapter.notifyDataSetChanged();
 
     }
 

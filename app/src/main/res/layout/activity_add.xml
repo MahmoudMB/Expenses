@@ -154,6 +154,13 @@ android:background="#ff7364"
     </LinearLayout>
 
 
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
@@ -493,5 +500,12 @@ android:text="الاثنين, 1 اكتوبر 2018"
         android:layout_height="wrap_content"
         android:id="@+id/AddActivity_Image"
         />
+
+
+
+
+</LinearLayout>
+
+</ScrollView>
 
 </LinearLayout>

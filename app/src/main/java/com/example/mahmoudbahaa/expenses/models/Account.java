@@ -18,22 +18,31 @@ public class Account implements Serializable{
     private int id;
     private String name;
     private String icon;
+    private float total;
     @Ignore
     private Boolean Status;
 
+    private Boolean defaultAccount;
 
-    public Account(int id, String name, String icon) {
+
+    public Account(int id, String name,float total, String icon,Boolean defaultAccount ) {
         this.id = id;
         this.name = name;
+        this.total = total;
         this.icon = icon;
         this.setStatus(false);
+        this.setStatus(defaultAccount);
     }
 
 
+
+
 @Ignore
-    public Account( String name, String icon) {
+    public Account( String name,float total, String icon,Boolean defaultAccount) {
         this.name = name;
-        this.icon = icon;
+    this.total = total;
+    this.icon = icon;
+        this.defaultAccount = defaultAccount;
     }
 
 
@@ -42,6 +51,21 @@ public class Account implements Serializable{
 
     }
 
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    public Boolean getDefaultAccount() {
+        return defaultAccount;
+    }
+
+    public void setDefaultAccount(Boolean defaultAccount) {
+        this.defaultAccount = defaultAccount;
+    }
 
     public int getId() {
         return id;
@@ -90,5 +114,15 @@ public class Account implements Serializable{
     public int hashCode() {
         return id;
     }
+
+
+    public static Account[] populateData() {
+        return new Account[] {
+                new Account("الحساب الافتراضي",0 ,"#8281ff", true)
+        };
+    }
+
+
+
 
 }

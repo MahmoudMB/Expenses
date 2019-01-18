@@ -34,4 +34,18 @@
 
 
     <color name="grey">#cecece</color>
+
+
+
+    <color name="color1">#8281ff</color>
+    <color name="color2">#639af4</color>
+    <color name="color3">#7ad2ff</color>
+    <color name="color4">#4cd3b2</color>
+    <color name="color5">#47d469</color>
+    <color name="color6">#f2be44</color>
+    <color name="color7">#ff965d</color>
+    <color name="color8">#fd7881</color>
+    <color name="color9">#d38cf2</color>
+
+
 </resources>

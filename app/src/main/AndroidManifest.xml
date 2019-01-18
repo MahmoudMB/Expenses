@@ -27,7 +27,9 @@
         <activity android:name=".NewCategory" />
         <activity android:name=".Addmemo" />
         <activity android:name=".EditAccount" />
-        <activity android:name=".NewAccount"></activity>
+        <activity android:name=".NewAccount" />
+        <activity android:name=".GeneralActivity" />
+        <activity android:name=".Login"></activity>
     </application>
 
 </manifest>

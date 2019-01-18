@@ -139,7 +139,7 @@ public class NewCategory extends AppCompatActivity {
         }
         else{
 
-            final Category category = new Category(categoryName,"ic_baseline_account_balance_24px",categoryType);
+            final Category category = new Category(categoryName,"ic_baseline_account_balance_24px",categoryType,false);
 
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override

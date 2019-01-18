@@ -2,6 +2,8 @@ package com.example.mahmoudbahaa.expenses.adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mahmoudbahaa.expenses.R;
@@ -66,7 +69,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
         final int resourceIdOfLastUsedImage = context.getResources().getIdentifier(account.getIcon(), "drawable",
                 context.getPackageName());
 
-        holder.AccountIcon.setImageResource(resourceIdOfLastUsedImage);
+//        holder.AccountIcon.setImageResource(resourceIdOfLastUsedImage);
 
 
         if (account.getStatus())
@@ -78,6 +81,18 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
             holder.AccountStatus.setVisibility(View.INVISIBLE);
         }
 
+
+
+        holder.AccountTotal.setText(account.getTotal()+"$");
+
+       // holder.Layout.setBackgroundColor(0xFF616261).setBackgroundColor(Color.parseColor(color));
+
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.RIGHT_LEFT,
+                new int[] {Color.parseColor(account.getIcon()),0xFFa297ff});
+        gd.setCornerRadius(20f);
+
+   holder.Layout.setBackground(gd);
 
         /*
         if (expense.getType().equals("Income"))
@@ -131,6 +146,8 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
         ImageView AccountIcon;
         TextView AccountName;
         ImageView AccountStatus ;
+        TextView AccountTotal;
+        LinearLayout Layout;
 
 
 
@@ -138,11 +155,11 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
         public MyviewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            AccountIcon = itemView.findViewById(R.id.Account_Icon);
+           // AccountIcon = itemView.findViewById(R.id.Account_Icon);
             AccountName = itemView.findViewById(R.id.Account_Name);
             AccountStatus = itemView.findViewById(R.id.Account_Status);
-
-
+            AccountTotal = itemView.findViewById(R.id.Account_Total);
+Layout  = itemView.findViewById(R.id.Account_layOut);
 
         }
 

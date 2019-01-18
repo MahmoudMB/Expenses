@@ -1,10 +1,12 @@
 package com.example.mahmoudbahaa.expenses.data;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.mahmoudbahaa.expenses.models.Account;
@@ -13,6 +15,8 @@ import com.example.mahmoudbahaa.expenses.models.Category;
 import com.example.mahmoudbahaa.expenses.models.CategoryDao;
 import com.example.mahmoudbahaa.expenses.models.Expense;
 import com.example.mahmoudbahaa.expenses.models.ExpenseDao;
+
+import java.util.concurrent.Executors;
 
 
 /**
@@ -29,12 +33,28 @@ public abstract class AppDatabase extends RoomDatabase {
     private static final String DATABASE_NAME = "Expenses";
     private static AppDatabase sInstance;
 
-    public static AppDatabase getsInstance(Context context){
+    public static AppDatabase getsInstance(final Context context){
 
         if (sInstance==null){
             synchronized (Lock){
                 Log.d(LOG_TAG,"Creating New Database Instance");
-                sInstance = Room.databaseBuilder(context.getApplicationContext(),AppDatabase.class,AppDatabase.DATABASE_NAME)
+                sInstance = Room.databaseBuilder(context.getApplicationContext(),AppDatabase.class,AppDatabase.DATABASE_NAME).
+
+                        addCallback(new Callback() {
+                            @Override
+                            public void onCreate(@NonNull SupportSQLiteDatabase db) {
+                                super.onCreate(db);
+
+                                Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        getsInstance(context).accountDao().insertAll(Account.populateData());
+                                        getsInstance(context).categoryDao().insertAll(Category.populateData());
+                                    }
+                                });
+
+                            }
+                        })
                         .build();
 
 
