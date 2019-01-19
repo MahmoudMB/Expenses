@@ -48,4 +48,20 @@
     <color name="color9">#d38cf2</color>
 
 
+
+    <color name="color11">#a398ff</color>
+    <color name="color22">#8fd0fb</color>
+    <color name="color33">#83e1f3</color>
+    <color name="color44">#56e2d2</color>
+    <color name="color55">#9ae481</color>
+    <color name="color66">#f4dd66</color>
+    <color name="color77">#fdcc3a</color>
+    <color name="color88">#fda483</color>
+    <color name="color99">#d4a9fe</color>
+
+
+    <color name="InActiveIcon">#c8c8c8</color>
+<color name="ActiveIcon">#555555</color>
+
+
 </resources>

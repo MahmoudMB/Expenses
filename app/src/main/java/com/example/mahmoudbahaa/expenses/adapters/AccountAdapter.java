@@ -89,10 +89,14 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
 
         GradientDrawable gd = new GradientDrawable(
                 GradientDrawable.Orientation.RIGHT_LEFT,
-                new int[] {Color.parseColor(account.getIcon()),0xFFa297ff});
+                new int[] {Color.parseColor(account.getIcon()),Color.parseColor(GetColor(account.getIcon()))});
         gd.setCornerRadius(20f);
 
    holder.Layout.setBackground(gd);
+
+
+
+
 
         /*
         if (expense.getType().equals("Income"))
@@ -122,6 +126,54 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
     }
 
 
+
+    public String GetColor(String c){
+
+       String color = "";
+
+       switch (c)
+       {
+           case "#8281ff":
+               color = "#a398ff";
+           break;
+
+           case "#639af4":
+               color = "#8fd0fb";
+               break;
+
+           case "#7ad2ff":
+               color = "#83e1f3";
+               break;
+
+           case "#4cd3b2":
+               color = "#56e2d2";
+               break;
+
+           case "#47d469":
+               color = "#9ae481";
+               break;
+
+           case "#f2be44":
+               color = "#f4dd66";
+               break;
+
+           case "#ff965d":
+               color = "#fdcc3a";
+               break;
+
+           case "#fd7881":
+               color = "#fda483";
+               break;
+
+           case "#d38cf2":
+               color = "#d4a9fe";
+               break;
+
+       }
+
+
+        return  color;
+    }
 
 
     @Override
@@ -160,7 +212,6 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
             AccountStatus = itemView.findViewById(R.id.Account_Status);
             AccountTotal = itemView.findViewById(R.id.Account_Total);
 Layout  = itemView.findViewById(R.id.Account_layOut);
-
         }
 
 

@@ -2,6 +2,8 @@ package com.example.mahmoudbahaa.expenses.adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.mahmoudbahaa.expenses.R;
@@ -67,7 +70,7 @@ holder.CategoryName.setText(category.getName());
         final int resourceIdOfLastUsedImage = context.getResources().getIdentifier(category.getIcon(), "drawable",
                 context.getPackageName());
 
-        holder.CategoryIcon.setImageResource(resourceIdOfLastUsedImage);
+     //   holder.CategoryIcon.setImageResource(resourceIdOfLastUsedImage);
 
 
 
@@ -80,6 +83,14 @@ holder.CategoryName.setText(category.getName());
         else {
             holder.CategoryStatus.setVisibility(View.INVISIBLE);
         }
+
+
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.RIGHT_LEFT,
+                new int[] {Color.parseColor(category.getIcon()),Color.parseColor(GetColor(category.getIcon()))});
+        gd.setCornerRadius(20f);
+
+        holder.Layout.setBackground(gd);
 
 
 
@@ -104,22 +115,72 @@ holder.CategoryName.setText(category.getName());
     }
 
 
+    public String GetColor(String c){
+
+        String color = "";
+
+        switch (c)
+        {
+            case "#8281ff":
+                color = "#a398ff";
+                break;
+
+            case "#639af4":
+                color = "#8fd0fb";
+                break;
+
+            case "#7ad2ff":
+                color = "#83e1f3";
+                break;
+
+            case "#4cd3b2":
+                color = "#56e2d2";
+                break;
+
+            case "#47d469":
+                color = "#9ae481";
+                break;
+
+            case "#f2be44":
+                color = "#f4dd66";
+                break;
+
+            case "#ff965d":
+                color = "#fdcc3a";
+                break;
+
+            case "#fd7881":
+                color = "#fda483";
+                break;
+
+            case "#d38cf2":
+                color = "#d4a9fe";
+                break;
+
+        }
+
+
+        return  color;
+    }
+
 
 
     class MyviewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
 
-        ImageView CategoryIcon;
+      // ImageView CategoryIcon;
         TextView CategoryName;
         ImageView CategoryStatus ;
+        LinearLayout Layout;
 
 
 
         public MyviewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            CategoryIcon = itemView.findViewById(R.id.Category_icon);
+         //   CategoryIcon = itemView.findViewById(R.id.Category_icon);
             CategoryName = itemView.findViewById(R.id.Category_name);
             CategoryStatus = itemView.findViewById(R.id.Category_Status);
+            Layout  = itemView.findViewById(R.id.Account_layOut);
 
 
         }

@@ -236,6 +236,9 @@ else {
 
     Memo = savedInstanceState.getString("Memo");
     FinalImagePath = savedInstanceState.getString("FinalImagePath");
+    fileUri = savedInstanceState.getParcelable("fileUri");
+
+  //  if (fileUri!=null)
 
 
     if (Type.equals("Income"))
@@ -281,8 +284,6 @@ else {
 }
 
 
-
-
         updateLabel();
 
 
@@ -300,6 +301,7 @@ else {
         outState.putLong("Date",myCalendar.getTimeInMillis());
         outState.putString("FinalImagePath",FinalImagePath);
         outState.putString("Memo",Memo);
+        outState.putParcelable("fileUri",fileUri);
 
     }
 
@@ -607,6 +609,9 @@ if (Type.equals("Income")) {
 
         }
     });
+
+
+
 }
 
             if (Type.equals("Outcome")) {

@@ -23,6 +23,8 @@
             android:orientation="vertical">
 
 
+
+
             <LinearLayout
                 android:background="@color/white"
                 android:layout_width="match_parent"
@@ -30,10 +32,23 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center"
                 android:gravity="center"
-            android:paddingTop="8dp"
+                android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:id="@+id/Main_dateLayout"
                 >
+
+
+
+             <ImageView
+                 android:id="@+id/prev"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/ic_baseline_keyboard_arrow_right_24px"
+                android:layout_gravity="center"
+                 android:tint="#515151"
+                 android:background="@drawable/btnpress"
+
+                 />
 
 
                 <TextView
@@ -71,6 +86,17 @@
                     android:textSize="24sp"
 
                     />
+
+                <ImageView
+                    android:id="@+id/next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_left_24px"
+                    android:layout_gravity="center"
+                    android:tint="#515151"
+                    android:background="@drawable/btnpress"
+                    />
+
 
             </LinearLayout>
 
@@ -123,11 +149,13 @@
 
 
             <ImageView
+                android:id="@+id/Main_CalendarIcon"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_calendar_today_24px"
 
-                android:tint="#515151"
+                android:tint="@color/ActiveIcon"
                 />
                 <TextView
                     android:layout_width="wrap_content"
@@ -153,11 +181,13 @@
 
 
                 <ImageView
+                    android:id="@+id/Main_StatisticsIcon"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_bar_chart_24px"
 
-                    android:tint="#515151"
+                    android:tint="@color/InActiveIcon"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -185,11 +215,13 @@ android:gravity="center"
 
 
                 <ImageView
+                    android:id="@+id/Main_ServicesIcon"
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_icons8_services"
 
-                    android:tint="#515151"
+                    android:tint="@color/InActiveIcon"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -215,11 +247,12 @@ android:gravity="center"
 
 
                 <ImageView
+                    android:id="@+id/Main_SettingsIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_baseline_settings_20px"
 
-                    android:tint="#515151"
+                    android:tint="@color/InActiveIcon"
                     />
                 <TextView
                     android:layout_width="wrap_content"

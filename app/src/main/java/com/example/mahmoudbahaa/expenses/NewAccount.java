@@ -1,6 +1,9 @@
 package com.example.mahmoudbahaa.expenses;
 
 import android.graphics.Color;
+import android.media.Image;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -36,6 +39,13 @@ public class NewAccount extends AppCompatActivity {
     EditText AccountTotal;
 
 
+    @BindView(R.id.newAccount_ChosenColor)
+    ImageView ChosenColor;
+
+
+    @BindView(R.id.newAccount_ColorsPlate)
+    LinearLayout ColorsPlate;
+
     private AppDatabase mDb;
 
 int CurrentColorIndex = 0;
@@ -67,6 +77,23 @@ int CurrentColorIndex = 0;
         ButterKnife.bind(this);
         mDb = AppDatabase.getsInstance(getApplicationContext());
         initColors();
+
+    }
+
+
+    @OnClick(R.id.NewAccount_ChooseColorLayout)
+    void OnClickOnChooseColor(){
+
+
+        if (ColorsPlate.getTag().equals("false")) {
+            ColorsPlate.setVisibility(View.VISIBLE);
+            ColorsPlate.setTag("true");
+        }
+        else {
+            ColorsPlate.setVisibility(View.GONE);
+            ColorsPlate.setTag("false");
+
+        }
 
     }
 
@@ -149,14 +176,28 @@ int CurrentColorIndex = 0;
     {
 
 
-        checks.get(0).setVisibility(View.VISIBLE);
+
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(0).setVisibility(View.VISIBLE);
 
         CurrentColorIndex = 0;
 
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(0)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(0)));
+
+
+
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+        ChosenColor.setBackgroundColor(getResources().getColor(R.color.color1));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color1));
+
+
+
 
     }
 
@@ -165,13 +206,22 @@ int CurrentColorIndex = 0;
     {
 
 
-        checks.get(1).setVisibility(View.VISIBLE);
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(1).setVisibility(View.VISIBLE);
+
 
         CurrentColorIndex = 1;
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(1)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(1)));
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            ChosenColor.setBackgroundColor(getResources().getColor(R.color.color2));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color2));
+
 
     }
 
@@ -180,13 +230,22 @@ int CurrentColorIndex = 0;
     {
 
 
-        checks.get(2).setVisibility(View.VISIBLE);
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(2).setVisibility(View.VISIBLE);
+
 
         CurrentColorIndex = 2;
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(2)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(2)));
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            ChosenColor.setBackgroundColor(getResources().getColor(R.color.color3));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color3));
+
 
     }
 
@@ -195,13 +254,22 @@ int CurrentColorIndex = 0;
     {
 
 
-        checks.get(3).setVisibility(View.VISIBLE);
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(3).setVisibility(View.VISIBLE);
+
 
         CurrentColorIndex = 3;
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(3)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(3)));
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            ChosenColor.setBackgroundColor(getResources().getColor(R.color.color4));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color4));
+
 
     }
 
@@ -210,13 +278,22 @@ int CurrentColorIndex = 0;
     {
 
 
-        checks.get(4).setVisibility(View.VISIBLE);
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(4).setVisibility(View.VISIBLE);
+
 
         CurrentColorIndex = 4;
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(4)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(4)));
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            ChosenColor.setBackgroundColor(getResources().getColor(R.color.color5));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color5));
+
 
     }
 
@@ -227,13 +304,23 @@ int CurrentColorIndex = 0;
     {
 
 
-        checks.get(5).setVisibility(View.VISIBLE);
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(5).setVisibility(View.VISIBLE);
+
 
         CurrentColorIndex = 5;
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(5)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(5)));
+
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            ChosenColor.setBackgroundColor(getResources().getColor(R.color.color6));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color6));
+
     }
 
     @OnClick(R.id.Color7_Relative)
@@ -241,13 +328,22 @@ int CurrentColorIndex = 0;
     {
 
 
-        checks.get(6).setVisibility(View.VISIBLE);
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(6).setVisibility(View.VISIBLE);
+
 
         CurrentColorIndex = 6;
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(6)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(6)));
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            ChosenColor.setBackgroundColor(getResources().getColor(R.color.color7));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color7));
+
 
     }
 
@@ -256,13 +352,21 @@ int CurrentColorIndex = 0;
     {
 
 
-        checks.get(7).setVisibility(View.VISIBLE);
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(7).setVisibility(View.VISIBLE);
 
         CurrentColorIndex = 7;
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(7)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(7)));
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            ChosenColor.setBackgroundColor(getResources().getColor(R.color.color8));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color8));
+
 
     }
 
@@ -270,13 +374,21 @@ int CurrentColorIndex = 0;
             void On9colorClick()
     {
 
-        checks.get(8).setVisibility(View.VISIBLE);
 
         checks.get(CurrentColorIndex).setVisibility(View.INVISIBLE);
+        checks.get(8).setVisibility(View.VISIBLE);
 
         CurrentColorIndex = 8;
         AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(8)));
         AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(ColorsHexa.get(8)));
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+            ChosenColor.setBackgroundColor(getResources().getColor(R.color.color9));
+
+
+        else
+            ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color9));
+
     }
 
 

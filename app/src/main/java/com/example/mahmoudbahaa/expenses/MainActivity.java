@@ -7,14 +7,19 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.media.Image;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 
@@ -60,6 +65,28 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
 
 
 
+
+    @BindView(R.id.Main_CalendarIcon)
+    ImageView Main_CalendarIcon;
+
+
+    @BindView(R.id.Main_StatisticsIcon)
+    ImageView Main_StatisticsIcon;
+
+
+    @BindView(R.id.Main_ServicesIcon)
+    ImageView Main_ServicesIcon;
+
+
+    @BindView(R.id.Main_SettingsIcon)
+    ImageView Main_SettingsIcon;
+
+
+
+
+    @BindView(R.id.viewB)
+    LinearLayout viewB;
+
     private UpdateUi listener ;
 
     public void setListener(UpdateUi listener)
@@ -82,6 +109,21 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mDb = AppDatabase.getsInstance(getApplicationContext());
+
+
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    0.6f
+            );
+viewB.setLayoutParams(param);
+
+        }
+
+
+
 
         setLocale();
 
@@ -199,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
 
         YearText.setText(sdf.format(myCalendar.getTime()));
     }
+
     private void updateLabel() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         
@@ -270,6 +313,20 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
 
     @OnClick(R.id.Main_Calendar)
     void OpenCalendarFragment(){
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
+        MainDateLayout.setVisibility(View.VISIBLE);
+        CalenderFragment  = true;
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
+            Main_ServicesIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_SettingsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_StatisticsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+        }
+
+
         Bundle bundle = new Bundle();
 
         //   String ChatsType = "All";
@@ -291,14 +348,24 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
                 .replace(R.id.Main_FragmentContainer, f)
                 .commit();
 
-        MainDateLayout.setVisibility(View.VISIBLE);
-        CalenderFragment  = true;
+
      //   listener.refreshCalendar(expensesForFragment);
 
     }
 
     @OnClick(R.id.Main_Statistics)
     void OpenStatisticsFragment(){
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_ServicesIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_SettingsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_StatisticsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
+        }
+
+
         Bundle bundle = new Bundle();
 
         //   String ChatsType = "All";
@@ -319,6 +386,17 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
 
     @OnClick(R.id.Main_Services)
     void OpenServicesFragment(){
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_ServicesIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
+            Main_SettingsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_StatisticsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+        }
+
+
         MainDateLayout.setVisibility(View.GONE);
 
         CalenderFragment = false;
@@ -326,6 +404,19 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
 
     @OnClick(R.id.Main_Settings)
     void OpenSettingsFragment(){
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
+
+        MainDateLayout.setVisibility(View.GONE);
+        CalenderFragment = false;
+
+
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_ServicesIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            Main_SettingsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
+            Main_StatisticsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+        }
 
         Bundle bundle = new Bundle();
 
@@ -350,8 +441,6 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
 
 
 
-        MainDateLayout.setVisibility(View.GONE);
-        CalenderFragment = false;
     }
 
 
@@ -399,5 +488,28 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
         return start + (24 * 60 * 60 * 1000);
     }
 
+
+
+    @OnClick(R.id.next)
+    void onNextDay(){
+
+        myCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        SetupMainViewModel();
+
+        updateLabel();
+
+
+    }
+
+    @OnClick(R.id.prev)
+    void onPrevDay(){
+
+        myCalendar.add(Calendar.DAY_OF_MONTH, -1);
+        SetupMainViewModel();
+
+        updateLabel();
+
+
+    }
 
 }

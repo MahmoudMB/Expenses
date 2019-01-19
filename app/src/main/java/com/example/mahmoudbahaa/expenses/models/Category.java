@@ -118,8 +118,8 @@ public class Category implements Serializable {
 
     public static Category[] populateData() {
         return new Category[] {
-                new Category("اخرى", "ic_baseline_account_balance_24px", "Outcome",true),
-                new Category("اخرى", "ic_baseline_account_balance_24px", "Income",true)
+                new Category("اخرى", "#8281ff", "Outcome",true),
+                new Category("اخرى", "#8281ff", "Income",true)
         };
     }
 

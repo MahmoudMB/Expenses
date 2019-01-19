@@ -32,7 +32,6 @@ android:layout_marginStart="10dp"
         android:textSize="20sp"
         android:textColor="#FFFFFF"
 android:fontFamily="sans-serif-medium"
-        android:layout_gravity="center"
         />
 
 
