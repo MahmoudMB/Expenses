@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
+    android:textDirection="rtl"
     tools:context="com.example.mahmoudbahaa.expenses.SettingsFragment">
 
 
@@ -83,6 +84,7 @@
 
 
             <TextView
+                android:id="@+id/Settings_EmailText"
                 android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -95,9 +97,10 @@
 
 
             <TextView
+                android:id="@+id/Settings_SyncDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-            android:text="Last Sync: 2019-1-17"
+                android:text="Last Sync: 2019-1-17"
                 android:textAlignment="center"
 
                 />
@@ -131,6 +134,7 @@
 
 
                 <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/Settings_SyncSwitch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
 
@@ -195,6 +199,7 @@
 
 
          <LinearLayout
+             android:id="@+id/Settings_EditCategory"
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -243,6 +248,7 @@
 
 
          <LinearLayout
+             android:id="@+id/Settings_EditAccount"
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:layout_width="match_parent"
@@ -338,6 +344,7 @@
 
 
         <TextView
+            android:id="@+id/Settings_Logout"
             android:textColor="#ff4828"
             android:layout_marginTop="25dp"
             android:layout_gravity="center"

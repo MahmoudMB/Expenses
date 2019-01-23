@@ -7,13 +7,51 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/Main_Recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
     </android.support.v7.widget.RecyclerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:id="@+id/Main_NoOp"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/calendar40"
+            android:tint="@color/InActiveIcon"
+
+            />
+
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="لايوجد عمليات في هذ اليوم"
+    android:textAlignment="center"
+    android:textSize="30sp"
+    android:padding="10dp"
+    android:textColor="@color/InActiveIcon"
+    />
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
 
 </FrameLayout>

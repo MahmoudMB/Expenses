@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.mahmoudbahaa.expenses.AppExecutors;
 import com.example.mahmoudbahaa.expenses.R;
+import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Account;
 import com.example.mahmoudbahaa.expenses.models.Category;
 import com.example.mahmoudbahaa.expenses.models.Expense;
@@ -85,6 +87,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
 
         holder.AccountTotal.setText(account.getTotal()+"$");
 
+
+
+        if (account.getTotal()<0)
+            holder.AccountTotal.setTextColor(Color.parseColor("#fd284b"));
        // holder.Layout.setBackgroundColor(0xFF616261).setBackgroundColor(Color.parseColor(color));
 
         GradientDrawable gd = new GradientDrawable(
@@ -186,6 +192,9 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
 
 
 
+
+
+
     public void setAccounts(List<Account> accounts) {
         this.data = accounts;
         notifyDataSetChanged();
@@ -200,6 +209,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.MyviewHo
         ImageView AccountStatus ;
         TextView AccountTotal;
         LinearLayout Layout;
+
 
 
 
@@ -230,6 +240,37 @@ Layout  = itemView.findViewById(R.id.Account_layOut);
 
 
     }
+
+
+    public void removeItem(final int position) {
+        final  Account accountTobeDeleted = data.get(position);
+
+        data.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase.getsInstance(context).accountDao().deleteAccount(accountTobeDeleted);
+                AppDatabase.getsInstance(context).expenseDao().DeleteAllExpensesWithAccountId(accountTobeDeleted.getId());
+            }
+        });
+
+    }
+
+    public void restoreItem(Account item, int position) {
+        data.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+    public Context getContext(){
+        return context;
+    }
+
 
 
 

@@ -1,9 +1,228 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.example.mahmoudbahaa.expenses.Login">
 
-</android.support.constraint.ConstraintLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/Login_iconLayout"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@color/colorAccent"
+        android:layout_height="250dp"
+
+        >
+
+
+
+        <ImageView
+            android:id="@+id/Login_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon"
+            android:layout_centerInParent="true"
+            />
+
+
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/login_overlay"
+        android:layout_height="250dp">
+
+    </LinearLayout>
+
+
+
+    <ScrollView
+        android:layout_below="@+id/Login_iconLayout"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+<LinearLayout
+    android:id="@+id/Login_emailPass"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="20dp"
+    android:layout_height="wrap_content"
+
+    android:layoutDirection="rtl"
+    >
+
+
+    <TextView
+        android:id="@+id/Login_StatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="25sp"
+        android:text="تسجيل الدخول"
+        android:layout_gravity="center"
+        />
+
+
+    <LinearLayout
+
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_width="match_parent">
+
+
+        <LinearLayout
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src
+                    ="@drawable/ic_baseline_email_24px"
+                android:tint="@color/InActiveIcon"
+                android:layout_centerVertical="true"
+
+                />
+
+        </LinearLayout>
+
+
+        <EditText
+            android:padding="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/Login_Email"
+            android:layout_centerVertical="true"
+
+            android:hint="البريد الالكتروني"
+            android:background="@android:color/transparent"
+            android:inputType="textEmailAddress|textNoSuggestions"
+            />
+
+
+
+
+    </LinearLayout>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/InActiveIcon"
+    ></View>
+    <LinearLayout
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_width="match_parent">
+
+
+        <LinearLayout
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src
+                    ="@drawable/ic_baseline_lock_24px"
+                android:tint="@color/InActiveIcon"
+                android:layout_centerVertical="true"
+
+                />
+
+        </LinearLayout>
+
+
+        <EditText
+            android:padding="5dp"
+            android:background="#CCffffff"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/Login_Password"
+            android:layout_centerVertical="true"
+            android:inputType="textPassword|textNoSuggestions"
+            android:gravity="right"
+            android:hint="كلمة السر"
+
+            />
+
+
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/InActiveIcon"
+        ></View>
+</LinearLayout>
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Login_emailPass"
+android:layout_centerInParent="true"
+        android:id="@+id/Login_Prograss"
+        android:visibility="gone"
+        />
+
+    <RelativeLayout
+        android:id="@+id/Login_Btns"
+        android:layout_below="@+id/Login_emailPass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/Login_SignIn"
+        android:layout_marginTop="20dp"
+        android:layout_width="220dp"
+        android:elevation="4dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/white"
+        android:text="تسجيل الدخول"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/login_corner_active"
+        android:layout_centerHorizontal="true"
+        />
+
+    <Button
+        android:id="@+id/Login_SignUp"
+        android:layout_width="220dp"
+        android:elevation="4dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="التسجيل الان"
+        android:textSize="20sp"
+        android:fontFamily="sans-serif-medium"
+        android:background="@drawable/login_corner_active"
+android:layout_centerHorizontal="true"
+android:layout_marginTop="16dp"
+android:layout_below="@+id/Login_SignIn"
+
+        />
+
+    </RelativeLayout>
+
+</RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

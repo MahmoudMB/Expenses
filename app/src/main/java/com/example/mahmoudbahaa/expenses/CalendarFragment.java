@@ -4,10 +4,13 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -15,16 +18,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.example.mahmoudbahaa.expenses.adapters.ExpenseAdapter;
+import com.example.mahmoudbahaa.expenses.adapters.ExpenseSwipeToDeleteCallback;
 import com.example.mahmoudbahaa.expenses.data.AppDatabase;
+import com.example.mahmoudbahaa.expenses.models.Account;
+import com.example.mahmoudbahaa.expenses.models.Category;
 import com.example.mahmoudbahaa.expenses.models.Expense;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class CalendarFragment extends Fragment implements ExpenseAdapter.ListItemClickListener,UpdateUi {
@@ -48,7 +66,14 @@ public class CalendarFragment extends Fragment implements ExpenseAdapter.ListIte
 
     private OnFragmentInteractionListener mListener;
 
+@BindView(R.id.Main_NoOp)
+    LinearLayout NoOp;
 
+
+
+
+
+    private AppDatabase mDb;
 
 
     public CalendarFragment() {
@@ -89,46 +114,36 @@ public class CalendarFragment extends Fragment implements ExpenseAdapter.ListIte
         rootView =  inflater.inflate(R.layout.fragment_calendar, container, false);
         ButterKnife.bind(this,rootView);
 
-Log.v("create","createCalender");
+
+
+       Log.v("create","createCalender");
+
+
+
 
         initRecyclerView();
         adapter.notifyDataSetChanged();
 
         //  dummeyData();
 
+        if (expenses.size()<=0)
+        {
+            NoOp.setVisibility(View.VISIBLE);
+
+        }
+        else{
+            NoOp.setVisibility(View.GONE);
+
+        }
 
 
-        new ItemTouchHelper(new ItemTouchHelper.Callback() {
-            @Override
-            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-                return 0;
-            }
-
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(final RecyclerView.ViewHolder viewHolder, int direction) {
-
-                AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                    @Override
-                    public void run() {
-int position = viewHolder.getAdapterPosition();
-List<Expense> expenses = adapter.getExpenses();
-//mDb.expenseDao().deleteExpense(expenses.get(position));
-
-
-
-                    }
-                });
-
-            }
-        }).attachToRecyclerView(recyclerView);
 
         return rootView;
     }
+
+
+
+
 
 
     @Override
@@ -148,13 +163,12 @@ List<Expense> expenses = adapter.getExpenses();
 
 
 
-
     @Override
     public void onListItemClick(int clickedItemIndex) {
 
 
         Intent i = new Intent(getActivity(),AddActivity.class);
-Log.v("expensesSize",expenses.size()+"");
+        Log.v("expensesSize",expenses.size()+"");
         i.putExtra("Expense",expenses.get(clickedItemIndex));
 
         startActivity(i);
@@ -169,6 +183,16 @@ Log.v("expensesSize",expenses.size()+"");
 expenses.clear();
 expenses.addAll(expenses1);
 adapter.notifyDataSetChanged();
+
+if (expenses1.size()<=0)
+{
+NoOp.setVisibility(View.VISIBLE);
+
+}
+else{
+    NoOp.setVisibility(View.GONE);
+
+}
 
     }
 
@@ -199,59 +223,21 @@ adapter.notifyDataSetChanged();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+
         recyclerView.setLayoutManager(layoutManager);
+
+
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new ExpenseSwipeToDeleteCallback(adapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
+
         recyclerView.setAdapter(adapter);
 
     }
 
-    private void dummeyData(){
 
-        List<Expense> expensesTemp = new ArrayList<>();
-        Expense e = new Expense();
-
-        e.setAccount("الحساب الاساسي");
-        e.setCategory("مشتريات");
-        e.setDescription("بقالة");
-        e.setPrice(2222);
-        e.setType("Outcome");
-
-        expensesTemp.add(e);
-
-
-        e = new Expense();
-
-        e.setAccount("حساب الراجحي");
-        e.setCategory("مشتريات");
-        e.setDescription("مكافأة");
-        e.setPrice(222);
-        e.setType("Income");
-
-        expensesTemp.add(e);
-
-
-        e = new Expense();
-
-        e.setAccount("الحساب الاساسي");
-        e.setCategory("مشتريات");
-        e.setDescription("مشتريات بنده");
-        e.setPrice(222);
-        e.setType("Outcome");
-
-        expensesTemp.add(e);
-
-
-        e = new Expense();
-
-        e.setAccount("حساب الراجحي");
-        e.setCategory("مشتريات");
-        e.setDescription("راتب");
-        e.setPrice(222);
-        e.setType("Income");
-
-        expensesTemp.add(e);
-
-        expenses.addAll(expensesTemp);
-        adapter.notifyDataSetChanged();
-
-    }
 }

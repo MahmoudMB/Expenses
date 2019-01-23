@@ -23,6 +23,25 @@ public interface AccountDao {
     LiveData< List<Account> >loadAllAccounts();
 
 
+    @Query("SELECT * from Account")
+    List<Account >loadAllAccountsList();
+
+
+
+    @Query("SELECT * from Account where id = :AId")
+    Account loadAcountById(int AId);
+
+    @Query("DELETE FROM Account")
+     void DeleteTable();
+
+
+    /*
+    @Query("DELETE FROM sqlite_sequence ")
+    void DeleteSEQTable();
+    */
+
+
+
     @Insert
     void insertAccount(Account account);
 
@@ -35,6 +54,8 @@ public interface AccountDao {
 
     @Insert
     void insertAll(Account... dataEntities);
+
+
 
     @Query("SELECT * FROM Account WHERE defaultAccount  = :value")
     LiveData< Account> LoadDefaultAccount(boolean value);

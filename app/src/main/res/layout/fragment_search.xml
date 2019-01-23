@@ -1,0 +1,419 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="rtl"
+    android:textDirection="rtl"
+
+    tools:context="com.example.mahmoudbahaa.expenses.SearchFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:orientation="vertical"
+
+      android:layout_height="match_parent">
+
+      <LinearLayout
+          android:id="@+id/Statistics_AccountSpinner"
+          android:layout_width="match_parent"
+          android:orientation="horizontal"
+          android:gravity="center"
+          android:background="@color/white"
+          android:paddingTop="11dp"
+          android:paddingBottom="11dp"
+          android:layout_height="wrap_content"
+
+          >
+
+
+          <TextView
+              android:id="@+id/Statistics_CurrentAccountName"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="بحث"
+              android:textSize="19sp"
+              />
+
+
+
+      </LinearLayout>
+
+
+
+      <ScrollView
+          android:layout_marginTop="16dp"
+          android:layout_width="match_parent"
+          android:background="@color/white"
+          android:layout_height="match_parent">
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="vertical"
+
+          android:background="@color/white"
+          >
+
+      <LinearLayout
+
+          android:orientation="horizontal"
+          android:layout_width="match_parent"
+          android:padding="8dp"
+          android:layout_height="wrap_content">
+          <TextView
+              android:layout_weight="1"
+              android:layout_width="0dp"
+              android:layout_height="wrap_content"
+              android:text="النوع"
+              android:layout_margin="10dp"
+              android:textSize="20sp"
+              />
+
+
+
+          <LinearLayout
+              android:id="@+id/EditCategory_Category"
+              android:layout_width="0dp"
+              android:layout_weight="2"
+              android:layout_height="40dp"
+              android:layout_marginEnd="10dp"
+              android:layout_gravity="center_vertical"
+              android:background="@drawable/timeline_rounded_corner">
+
+
+
+              <LinearLayout
+                  android:id="@+id/Search_All"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:background="@drawable/timeline_rounded_corner"
+                  android:orientation="horizontal">
+
+                  <TextView
+                      android:id="@+id/Search_All_Text"
+
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_margin="5dp"
+                      android:text="الكل"
+                      android:textAlignment="center"
+                      android:textColor="@color/white" />
+
+
+              </LinearLayout>
+
+              <LinearLayout
+                  android:id="@+id/Add_OutCome"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:background="@drawable/timeline_rounded_corner"
+                  android:orientation="horizontal">
+
+                  <TextView
+                      android:id="@+id/Add_OutCome_Text"
+
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_margin="5dp"
+                      android:text="مصروفات"
+                      android:textAlignment="center"
+                      android:textColor="@color/TimeLineInActive" />
+
+
+              </LinearLayout>
+
+
+              <LinearLayout
+                  android:id="@+id/Add_Income"
+                  android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:layout_weight="1"
+                  android:background="@drawable/timeline_rounded_corner"
+
+                  >
+
+                  <TextView
+                      android:id="@+id/Add_Income_Text"
+
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:layout_margin="5dp"
+                      android:text="ايرادات"
+                      android:textAlignment="center"
+                      android:textColor="@color/TimeLineInActive"
+
+                      />
+
+              </LinearLayout>
+
+
+
+
+          </LinearLayout>
+
+
+
+
+      </LinearLayout>
+
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/grey">
+
+          </View>
+
+
+          <LinearLayout
+              android:id="@+id/Search_Account"
+              android:padding="8dp"
+
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+              <TextView
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="الحساب"
+                  android:layout_margin="10dp"
+                  android:textSize="20sp"
+                  />
+
+
+
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_weight="2"
+                  android:layout_height="40dp"
+                  android:layout_marginEnd="10dp"
+                  android:layout_gravity="center_vertical"
+                 >
+
+
+                  <TextView
+                      android:id="@+id/Search_AccountText"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="جميع الحسابات"
+                      android:layout_gravity="center"
+                      android:textAlignment="center"
+                      android:textSize="20sp"
+                      />
+
+
+
+              </LinearLayout>
+
+
+
+
+          </LinearLayout>
+
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/grey">
+
+          </View>
+
+          <LinearLayout
+              android:id="@+id/Search_Category"
+
+              android:padding="8dp"
+
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+              <TextView
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="الفئة"
+                  android:layout_margin="10dp"
+                  android:textSize="20sp"
+                  />
+
+
+
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_weight="2"
+                  android:layout_height="40dp"
+                  android:layout_marginEnd="10dp"
+                  android:layout_gravity="center_vertical"
+                  >
+
+
+                  <TextView
+                      android:id="@+id/Search_CategoryText"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="جميع الفئات"
+                      android:layout_gravity="center"
+                      android:textAlignment="center"
+                      android:textSize="20sp"
+                      />
+
+
+
+              </LinearLayout>
+
+
+
+
+          </LinearLayout>
+
+
+          <View
+              android:id="@+id/Search_Category_line"
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/grey">
+
+          </View>
+
+          <LinearLayout
+              android:padding="8dp"
+              android:id="@+id/Search_DateFrom"
+
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+              <TextView
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="التاريخ من"
+                  android:layout_margin="10dp"
+                  android:textSize="20sp"
+                  />
+
+
+
+              <LinearLayout
+                  android:id="@+id/EditCategory_Category1"
+                  android:layout_width="0dp"
+                  android:layout_weight="2"
+                  android:layout_height="40dp"
+                  android:layout_marginEnd="10dp"
+                  android:layout_gravity="center_vertical"
+                  >
+
+
+                  <TextView
+                      android:id="@+id/Search_DateFromText"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="1/1/2019"
+                      android:layout_gravity="center"
+                      android:textAlignment="center"
+                      android:textSize="20sp"
+                      />
+
+
+
+              </LinearLayout>
+
+
+
+
+          </LinearLayout>
+
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/grey">
+
+          </View>
+
+
+          <LinearLayout
+              android:padding="8dp"
+              android:id="@+id/Search_DateTo"
+
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+              <TextView
+                  android:layout_weight="1"
+                  android:layout_width="0dp"
+                  android:layout_height="wrap_content"
+                  android:text="التاريخ الى"
+                  android:layout_margin="10dp"
+                  android:textSize="20sp"
+                  />
+
+
+
+              <LinearLayout
+                  android:layout_width="0dp"
+                  android:layout_weight="2"
+                  android:layout_height="40dp"
+                  android:layout_marginEnd="10dp"
+                  android:layout_gravity="center_vertical"
+                  >
+
+
+                  <TextView
+                      android:id="@+id/Search_DateToText"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:text="1/1/2019"
+                      android:layout_gravity="center"
+                      android:textAlignment="center"
+                      android:textSize="20sp"
+                      />
+
+
+
+              </LinearLayout>
+
+
+
+
+          </LinearLayout>
+
+
+          <View
+              android:layout_width="match_parent"
+              android:layout_height="1dp"
+              android:background="@color/grey">
+
+          </View>
+
+
+
+          <Button
+              android:id="@+id/Search_Btn"
+              android:layout_width="220dp"
+              android:elevation="4dp"
+              android:layout_height="wrap_content"
+              android:textColor="@color/white"
+              android:text="بحث"
+              android:textSize="20sp"
+              android:fontFamily="sans-serif-medium"
+              android:background="@drawable/login_corner_active"
+              android:layout_marginTop="16dp"
+              android:layout_below="@+id/Login_SignIn"
+android:layout_gravity="center"
+              />
+
+
+      </LinearLayout>
+
+
+
+
+
+
+
+      </ScrollView>
+  </LinearLayout>
+
+</FrameLayout>

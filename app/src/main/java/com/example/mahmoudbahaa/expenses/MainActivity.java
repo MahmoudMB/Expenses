@@ -7,11 +7,15 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.media.Image;
 import android.os.Build;
+import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -19,20 +23,34 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 
 import com.example.mahmoudbahaa.expenses.adapters.ExpenseAdapter;
 import com.example.mahmoudbahaa.expenses.data.AppDatabase;
+import com.example.mahmoudbahaa.expenses.models.Account;
+import com.example.mahmoudbahaa.expenses.models.Category;
 import com.example.mahmoudbahaa.expenses.models.Expense;
 import com.example.mahmoudbahaa.expenses.models.MainViewModel;
+import com.example.mahmoudbahaa.expenses.models.Sequence;
+import com.example.mahmoudbahaa.expenses.models.Sync;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.Executors;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,11 +59,11 @@ import butterknife.OnClick;
 
 
 
-public class MainActivity extends AppCompatActivity implements ExpenseAdapter.ListItemClickListener {
+public class MainActivity extends AppCompatActivity implements ExpenseAdapter.ListItemClickListener,MyResultReceiver.Receiver {
     final Calendar myCalendar = Calendar.getInstance();
 
 
-
+    LiveData<List<Expense>> expenses1;
     DatePickerDialog.OnDateSetListener date;
 
     @BindView(R.id.Main_Day)
@@ -83,9 +101,21 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
 
 
 
+    @BindView(R.id.Prograss_Text)
+    TextView Prograss_Text;
 
     @BindView(R.id.viewB)
     LinearLayout viewB;
+
+
+    @BindView(R.id.Main)
+    LinearLayout Main_Layout;
+
+    @BindView(R.id.Main_Prograss)
+    LinearLayout Main_Prograss;
+
+    @BindView(R.id.Main_fab)
+    FloatingActionButton fab;
 
     private UpdateUi listener ;
 
@@ -94,11 +124,16 @@ public class MainActivity extends AppCompatActivity implements ExpenseAdapter.Li
         this.listener = listener ;
     }
 
+    public MyResultReceiver mReceiver;
 
 
 
 
     Boolean CalenderFragment = false;
+    Boolean StatisticsFragment = false;
+    Boolean ServicesFragment = false;
+    Boolean SettingsFragment = false;
+
     private AppDatabase mDb;
 
     ArrayList<Expense> expensesForFragment = new ArrayList<>();
@@ -139,24 +174,400 @@ viewB.setLayoutParams(param);
         else{
 
             CalenderFragment = savedInstanceState.getBoolean("CalenderFragment");
+
+            StatisticsFragment = savedInstanceState.getBoolean("StatisticsFragment");
+             ServicesFragment = savedInstanceState.getBoolean("ServicesFragment");
+             SettingsFragment = savedInstanceState.getBoolean("SettingsFragment");
+Long MyCalenderTime = savedInstanceState.getLong("myCalendar");
+myCalendar.setTimeInMillis(MyCalenderTime);
+
             if (CalenderFragment)
                 initCalenderFragment();
-
+            SetIcononRotate();
         }
 
         initDate();
 
 
         SetupMainViewModel();
+
+
+
+
+        FrameLayout l = findViewById(R.id.Main_FragmentContainer);
+
+        l.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()) {
+            @Override
+            public void onSwipeLeft() {
+                // Whatever
+
+                myCalendar.add(Calendar.DAY_OF_MONTH, 1);
+                RemoveObservers();
+                SetupMainViewModel();
+
+                updateLabel();
+            }
+
+            @Override
+            public void onSwipeRight() {
+
+
+                myCalendar.add(Calendar.DAY_OF_MONTH, -1);
+                RemoveObservers();
+                SetupMainViewModel();
+
+                updateLabel();
+
+            }
+        });
+
+
+        if (getIntent().hasExtra("status")) {
+            initCalendar(getIntent().getStringExtra("status"));
+
+        }
+    }
+
+    void initCalendar(String status){
+
+        switch (status){
+
+            case "Normal":
+                Main_Prograss.setVisibility(View.GONE);
+                Main_Layout.setVisibility(View.VISIBLE);
+                fab.setVisibility(View.VISIBLE);
+                break;
+
+            case "LogIn":
+
+                Boolean sameUser = getIntent().getBooleanExtra("sameUser",false);
+
+
+                if (!sameUser) {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                    Main_Prograss.setVisibility(View.VISIBLE);
+                    Prograss_Text.setText(getResources().getText(R.string.SyncData));
+                    Main_Layout.setVisibility(View.GONE);
+                    fab.setVisibility(View.GONE);
+
+
+                    mReceiver = new MyResultReceiver(new Handler());
+
+                    mReceiver.setReceiver(this);
+
+                    Intent i = new Intent(MainActivity.this, SyncDataService.class);
+                    i.putExtra("receiverTag", mReceiver);
+
+                    startService(i);
+/*
+                new android.os.Handler().postDelayed(
+                        new Runnable() {
+                            public void run() {
+                                Log.i("tag", "This'll run 300 milliseconds later");
+
+
+
+                            }
+                        },
+                        5000);
+*/
+                }
+
+
+
+
+
+                break;
+
+            case "SignUp":
+                Log.v("SignUp","Opened");
+                Main_Prograss.setVisibility(View.VISIBLE);
+                Prograss_Text.setText(getResources().getText(R.string.initData));
+
+                Main_Layout.setVisibility(View.GONE);
+                fab.setVisibility(View.GONE);
+
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mDb.categoryDao().DeleteTable();
+                        mDb.accountDao().DeleteTable();
+                        mDb.expenseDao().DeleteTable();
+                        mDb.sequenceDao().DeleteTable();
+                        mDb.syncDao().DeleteTable();
+
+                        mDb.accountDao().insertAll(Account.populateData());
+                        mDb.categoryDao().insertAll(Category.populateData());
+                        mDb.sequenceDao().insertAll(Sequence.populateData());
+                        mDb.syncDao().insertSync(new Sync(1,new Date().getTime(),true));
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                Main_Prograss.setVisibility(View.GONE);
+                                Main_Layout.setVisibility(View.VISIBLE);
+                                fab.setVisibility(View.VISIBLE);
+
+                                CreateDbCopy(GetUserId());
+                            }
+                        });
+
+
+                    }
+                });
+
+                AppExecutors.getInstance().mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+
+
+
+
+                    }
+                });
+
+                break;
+
+
+        }
+
+
+    }
+
+    void CleanDb(){
+
+
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mDb.categoryDao().DeleteTable();
+                mDb.accountDao().DeleteTable();
+                mDb.expenseDao().DeleteTable();
+                mDb.sequenceDao().DeleteTable();
+                mDb.syncDao().DeleteTable();
+
+            }
+
+
+        });
+
     }
 
 
+
+    void CreateDbCopy(String UserId){
+
+        Intent i = new Intent(MainActivity.this,BackUpService.class);
+        i.putExtra("UserId",UserId);
+        i.setAction("CreateCopy");
+        startService(i);
+    }
+
+
+    String GetUserId(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String Id = preferences.getString("Id", "");
+
+
+        return Id;
+
+    }
+
+
+
+    void SyncFromDatabase()
+    {
+
+        String userId = GetUserId();
+
+        ValueEventListener expenseListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+
+                List<Expense> expenses = new ArrayList<>();
+
+
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+
+                    Expense expense = new Expense(postSnapshot);
+                    expenses.add(expense);
+
+                }
+
+                final Expense[] array = expenses.toArray(new Expense[expenses.size()]);
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb.expenseDao().insertAll(array);
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Main_Layout.setVisibility(View.VISIBLE);
+                                fab.setVisibility(View.VISIBLE);
+
+                                Main_Prograss.setVisibility(View.GONE);
+                            }
+                        });
+
+
+
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("Tag", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("Expenses").addValueEventListener(expenseListener);
+
+
+
+
+        ValueEventListener AccountListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                List<Account> accounts = new ArrayList<>();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+
+                    Account account = new Account(postSnapshot);
+                    accounts.add(account);
+                }
+
+                final Account[] arrayAccount = accounts.toArray(new Account[accounts.size()]);
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb.accountDao().insertAll(arrayAccount);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("Tag", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("Accounts").addValueEventListener(AccountListener);
+
+
+
+
+        ValueEventListener CategoriesListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+
+                List<Category> categories = new ArrayList<>();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+
+                    Category category = new Category(postSnapshot);
+                    categories.add(category);
+
+                }
+
+                final Category[] arrayCategory = categories.toArray(new Category[categories.size()]);
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb.categoryDao().insertAll(arrayCategory);
+                    }
+                });
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("Tag", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("Categories").addValueEventListener(CategoriesListener);
+
+
+
+
+
+
+
+        ValueEventListener SequenceListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+
+                List<Sequence> sequences = new ArrayList<>();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+
+                    Sequence sequence = new Sequence(postSnapshot);
+                    sequences.add(sequence);
+
+                }
+
+                final Sequence[] arraysequences = sequences.toArray(new Sequence[sequences.size()]);
+
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb.sequenceDao().insertAll(arraysequences);
+                    }
+                });
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("Tag", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userId).child("Sequence").addValueEventListener(SequenceListener);
+
+
+
+
+
+    };
+
+
+
+
+public void RemoveObservers(){
+    expenses1.removeObservers(this);
+}
     public void SetupMainViewModel(){
         Long start = getStartOfDayInMillis(myCalendar);
         Long end = getEndOfDayInMillis(start);
       //  final LiveData< List<Expense>> expenses1 = mDb.expenseDao().loadAllExpenses(start,end);
 
-        LiveData<List<Expense>> expenses1   = mDb.expenseDao().loadAllExpenses(start,end);
+         expenses1   = mDb.expenseDao().loadAllExpenses(start,end);
 
 
 
@@ -175,10 +586,49 @@ viewB.setLayoutParams(param);
 
 
 
+        void SetIcononRotate(){
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && CalenderFragment) {
+                Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
+                Main_ServicesIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_SettingsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_StatisticsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            }
+
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && StatisticsFragment) {
+                Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_ServicesIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_SettingsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_StatisticsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
+            }
+
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && ServicesFragment) {
+                Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_ServicesIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
+                Main_SettingsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_StatisticsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            }
+
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP && SettingsFragment) {
+                Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_ServicesIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+                Main_SettingsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
+                Main_StatisticsIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.InActiveIcon));
+            }
+
+
+
+        }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
         outState.putBoolean("CalenderFragment",CalenderFragment);
+
+
+        outState.putBoolean("StatisticsFragment",StatisticsFragment);
+        outState.putBoolean("ServicesFragment",ServicesFragment);
+        outState.putBoolean("SettingsFragment",SettingsFragment);
+         outState.putLong("myCalendar",myCalendar.getTimeInMillis());
 
         super.onSaveInstanceState(outState);
     }
@@ -209,6 +659,7 @@ viewB.setLayoutParams(param);
                 myCalendar.set(Calendar.YEAR, year);
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                RemoveObservers();
                 SetupMainViewModel();
 
                 updateLabel();
@@ -306,7 +757,7 @@ viewB.setLayoutParams(param);
     void OpenAddActivity(){
 
         Intent i = new Intent(MainActivity.this,AddActivity.class);
-
+      i.putExtra("date",myCalendar.getTimeInMillis());
         startActivity(i);
     }
 
@@ -318,6 +769,10 @@ viewB.setLayoutParams(param);
 
         MainDateLayout.setVisibility(View.VISIBLE);
         CalenderFragment  = true;
+
+        StatisticsFragment = false;
+         ServicesFragment = false;
+         SettingsFragment = false;
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             Main_CalendarIcon.setImageTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.ActiveIcon));
@@ -382,6 +837,9 @@ viewB.setLayoutParams(param);
                 .commit();
         MainDateLayout.setVisibility(View.GONE);
         CalenderFragment = false;
+        StatisticsFragment = true;
+        ServicesFragment = false;
+        SettingsFragment = false;
     }
 
     @OnClick(R.id.Main_Services)
@@ -397,9 +855,32 @@ viewB.setLayoutParams(param);
         }
 
 
+
+
+        Bundle bundle = new Bundle();
+
+        //   String ChatsType = "All";
+        //  bundle.putString("Type",ChatsType);
+        //  bundle.putString("userId",userId);
+        SearchFragment f = new SearchFragment();
+        f.setArguments(bundle);
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction()
+                .replace(R.id.Main_FragmentContainer, f)
+                .commit();
+
+
+
+
         MainDateLayout.setVisibility(View.GONE);
 
         CalenderFragment = false;
+        StatisticsFragment = false;
+        ServicesFragment = true;
+        SettingsFragment = false;
     }
 
     @OnClick(R.id.Main_Settings)
@@ -409,6 +890,9 @@ viewB.setLayoutParams(param);
 
         MainDateLayout.setVisibility(View.GONE);
         CalenderFragment = false;
+        StatisticsFragment = false;
+        ServicesFragment = false;
+        SettingsFragment = true;
 
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
@@ -494,6 +978,7 @@ viewB.setLayoutParams(param);
     void onNextDay(){
 
         myCalendar.add(Calendar.DAY_OF_MONTH, 1);
+        RemoveObservers();
         SetupMainViewModel();
 
         updateLabel();
@@ -505,6 +990,7 @@ viewB.setLayoutParams(param);
     void onPrevDay(){
 
         myCalendar.add(Calendar.DAY_OF_MONTH, -1);
+        RemoveObservers();
         SetupMainViewModel();
 
         updateLabel();
@@ -512,4 +998,15 @@ viewB.setLayoutParams(param);
 
     }
 
+    @Override
+    public void onReceiveResult(int resultCode, Bundle resultData) {
+        mReceiver.setReceiver(null);
+
+        Main_Prograss.setVisibility(View.GONE);
+        Main_Layout.setVisibility(View.VISIBLE);
+        fab.setVisibility(View.VISIBLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+
+
+    }
 }

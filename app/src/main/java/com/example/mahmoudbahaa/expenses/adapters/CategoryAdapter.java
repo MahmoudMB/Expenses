@@ -1,11 +1,8 @@
 package com.example.mahmoudbahaa.expenses.adapters;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.mahmoudbahaa.expenses.AppExecutors;
 import com.example.mahmoudbahaa.expenses.R;
+import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Category;
 import com.example.mahmoudbahaa.expenses.models.Expense;
 
@@ -36,7 +35,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Myview
 
 
     public interface ListItemClickListener {
-        void onListItemClick(int clickedItemIndex);
+        void onCategoryListItemClick(int clickedItemIndex);
     }
 
 
@@ -192,7 +191,7 @@ holder.CategoryName.setText(category.getName());
 
             int clickedPosition = getAdapterPosition();
             //   String  CatName = data.get(clickedPosition).getName();
-            mOnClickListener.onListItemClick(clickedPosition);
+            mOnClickListener.onCategoryListItemClick(clickedPosition);
 
         }
 
@@ -200,6 +199,36 @@ holder.CategoryName.setText(category.getName());
 
 
 
+    }
+
+    public void removeItem(final int position) {
+
+      final  Category DeletedCategory = data.get(position);
+        data.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase.getsInstance(context).categoryDao().deleteCategory(DeletedCategory);
+                AppDatabase.getsInstance(context).expenseDao().DeleteAllExpensesWithCategoryId(DeletedCategory.getId());
+
+            }
+        });
+
+    }
+
+    public void restoreItem(Category item, int position) {
+        data.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+    public Context getContext(){
+        return context;
     }
 
 

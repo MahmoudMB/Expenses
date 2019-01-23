@@ -4,16 +4,21 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.io.Serializable;
+import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by MahmoudBahaa on 12/01/2019.
  */
+@IgnoreExtraProperties
 @Entity
 public class Category implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-
+    @PrimaryKey()
     private int id;
     private String name;
     private String icon;
@@ -48,6 +53,21 @@ public class Category implements Serializable {
     public Category() {
 
     }
+
+
+    @Ignore
+    public Category(DataSnapshot dataSnapshot){
+        HashMap<String, Object> object = (HashMap<String, Object>) dataSnapshot.getValue();
+
+        this.id = Integer.parseInt( object.get("id").toString());
+        this.name = object.get("name").toString();
+        this.icon = object.get("icon").toString();
+        this.type = object.get("type").toString();
+
+        this.defaultCategory =  Boolean.parseBoolean(object.get("defaultCategory").toString());
+
+    }
+
 
 
     public Boolean getDefaultCategory() {
@@ -118,8 +138,8 @@ public class Category implements Serializable {
 
     public static Category[] populateData() {
         return new Category[] {
-                new Category("اخرى", "#8281ff", "Outcome",true),
-                new Category("اخرى", "#8281ff", "Income",true)
+                new Category(1,"اخرى", "#8281ff", "Outcome",true),
+                new Category(2,"اخرى", "#8281ff", "Income",true)
         };
     }
 

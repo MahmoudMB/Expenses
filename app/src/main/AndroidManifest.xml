@@ -12,13 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".AddActivity" />
         <activity android:name=".SettingsActivity" />
         <activity
@@ -29,7 +23,27 @@
         <activity android:name=".EditAccount" />
         <activity android:name=".NewAccount" />
         <activity android:name=".GeneralActivity" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Register" />
+
+        <service
+            android:name=".BackUpService"
+            android:exported="false" />
+        <service
+            android:name=".SyncDataService"
+            android:exported="false" />
+
+        <activity android:name=".EditCategoryIncome" />
+        <activity android:name=".EditCategoryOutcome" />
+        <activity android:name=".EditCategories" />
+        <activity android:name=".SearchResults" />
+        <activity android:name=".EnlargeImage"></activity>
     </application>
 
 </manifest>

@@ -30,7 +30,7 @@ android:src="@drawable/ic_baseline_stars_24px"
 
         <TextView
             android:id="@+id/Expenses_Description"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ddd"
             android:textColor="#171717"
@@ -40,7 +40,7 @@ android:src="@drawable/ic_baseline_stars_24px"
 
         <TextView
             android:id="@+id/Expenses_Account"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="الحساب الاساسي"
             android:fontFamily="sans-serif-condensed"
@@ -55,11 +55,13 @@ android:src="@drawable/ic_baseline_stars_24px"
     <TextView
         android:id="@+id/Expenses_Price"
         android:layout_weight="1"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
- android:textSize="17sp"
+         android:textSize="17sp"
         android:textColor="@color/money_income"
-        android:text="55555$"
+        android:text="555544444455$"
+        android:layoutDirection="ltr"
+        android:textDirection="ltr"
         />
 
 

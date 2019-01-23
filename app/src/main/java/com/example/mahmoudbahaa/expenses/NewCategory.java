@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Category;
+import com.example.mahmoudbahaa.expenses.models.Sequence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +25,23 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class NewCategory extends AppCompatActivity {
+/*
 
-
-    @BindView(R.id.Add_OutCome)
-    LinearLayout Add_OutCome;
-
+     @BindView(R.id.Add_Income_Text)
+    TextView Add_Income_Text;
     @BindView(R.id.Add_Income)
     LinearLayout Add_Income;
 
+@BindView(R.id.Add_OutCome)
+LinearLayout Add_OutCome;
+
+
+
+*/
 
     @BindView(R.id.Add_OutCome_Text)
     TextView Add_OutCome_Text;
 
-    @BindView(R.id.Add_Income_Text)
-    TextView Add_Income_Text;
 
 
     @BindView(R.id.EditCategory_name)
@@ -78,20 +82,60 @@ public class NewCategory extends AppCompatActivity {
     @BindView(R.id.AddActivity_SecondLayout)
     LinearLayout AddActivity_SecondLayout;
 
+    String type = "";
+
+
+    Category categoryObj;
+    Boolean Update = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_category);
         ButterKnife.bind(this);
-        setTimeLineClick(0);
+       // setTimeLineClick(0);
         mDb = AppDatabase.getsInstance(getApplicationContext());
+        type = getIntent().getStringExtra("Type");
+
+        if (type.equals("Outcome")){
+            Add_OutCome_Text.setText("مصروفات");
+        }
+        else if (type.equals("Income")){
+            Add_OutCome_Text.setText("ايرادات");
+        }
+
+
+
+        if (getIntent().hasExtra("Category"))
+        {
+            Update = true;
+            categoryObj = (Category) getIntent().getSerializableExtra("Category");
+            CategoryName.setText(categoryObj.getName());
+
+
+            AddActivity_FirstLayout.setBackgroundColor(Color.parseColor(categoryObj.getIcon()));
+            AddActivity_SecondLayout.setBackgroundColor(Color.parseColor(categoryObj.getIcon()));
+
+
+
+
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+                ChosenColor.setBackgroundColor(getResources().getColor(ReturnColor(categoryObj.getIcon())));
+
+
+            else
+                ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), ReturnColor(categoryObj.getIcon())));
+
+
+
+        }
+
         initColors();
 
     }
 
 
-
+/*
     @OnClick(R.id.Add_OutCome)
     void OnOutComeClick() {
         setTimeLineClick(0);
@@ -104,7 +148,6 @@ public class NewCategory extends AppCompatActivity {
         setTimeLineClick(1);
         categoryType = "Income";
     }
-
 
 
     void setTimeLineClick(int index) {
@@ -165,6 +208,7 @@ public class NewCategory extends AppCompatActivity {
 
     }
 
+*/
 
 
     @OnClick(R.id.NewCategory_Done)
@@ -177,16 +221,49 @@ public class NewCategory extends AppCompatActivity {
         }
         else{
 
-            final Category category = new Category(categoryName,ColorsHexa.get(CurrentColorIndex),categoryType,false);
 
-            AppExecutors.getInstance().diskIO().execute(new Runnable() {
-                @Override
-                public void run() {
-                    mDb.categoryDao().insertCategory(category);
-                    finish();
+            if (!Update) {
 
-                }
-            });
+                Sequence seq = mDb.sequenceDao().loadCategorySeq();
+                seq.setSeq(seq.getSeq() + 1);
+
+                final Category category = new Category(seq.getSeq(), categoryName, ColorsHexa.get(CurrentColorIndex), type, categoryObj.getDefaultCategory());
+
+                final Sequence seqUpdated = seq;
+                AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        mDb.sequenceDao().UpdateCategorySeq(seqUpdated);
+                        mDb.categoryDao().insertCategory(category);
+
+                        finish();
+
+                    }
+                });
+
+            }
+            else if (Update)
+            {
+
+
+                if (!categoryObj.getName().equals(categoryName) || !categoryObj.getIcon().equals(ColorsHexa.get(CurrentColorIndex))){
+
+
+                    final Category category = new Category(categoryObj.getId(), categoryName, ColorsHexa.get(CurrentColorIndex), type, categoryObj.getDefaultCategory());
+
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mDb.categoryDao().UpdateCategory(category);
+
+                        finish();
+
+                    }
+                });
+            }
+finish();
+            }
         }
 
     }
@@ -478,5 +555,53 @@ public class NewCategory extends AppCompatActivity {
             ChosenColor.setBackgroundTintList(ContextCompat.getColorStateList(getApplicationContext(), R.color.color9));
 
     }
+
+    int ReturnColor(String color){
+
+        switch (color){
+
+            case "#8281ff":
+                CurrentColorIndex = 0;
+                return R.color.color1;
+
+            case "#639af4":
+                CurrentColorIndex = 1;
+                return R.color.color2;
+
+
+            case "#7ad2ff":
+                CurrentColorIndex = 2;
+                return R.color.color3;
+
+
+            case "#4cd3b2":
+                CurrentColorIndex = 3;
+                return R.color.color4;
+
+            case "#47d469":
+                CurrentColorIndex = 4;
+                return R.color.color5;
+
+            case "#f2be44":
+                CurrentColorIndex = 5;
+                return R.color.color6;
+
+            case "#ff965d":
+                CurrentColorIndex = 6;
+                return R.color.color7;
+
+
+            case "#fd7881":
+                CurrentColorIndex = 7;
+                return R.color.color8;
+
+            case "#d38cf2":
+                CurrentColorIndex = 8;
+                return R.color.color9;
+
+        }
+        return 0;
+    }
+
 
 }

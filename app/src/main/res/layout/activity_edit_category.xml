@@ -11,22 +11,26 @@
 
 
     <LinearLayout
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@color/white"
+        android:id="@+id/AddActivity_FirstLayout">
 
 
-<ImageView
-    android:id="@+id/EditCategory_Back"
-    android:layout_weight="0.5"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_baseline_arrow_forward_ios_24px"
-    android:background="@drawable/btnpress"
-    />
+        <ImageView
+            android:id="@+id/EditCategory_Back"
+            android:layout_weight="0.5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_arrow_forward_ios_24px"
+            android:layout_gravity="center_vertical"
 
+            android:tint="@color/BackArrow"
+            android:background="@drawable/btnpress"
+            />
 
         <LinearLayout
             android:id="@+id/EditCategory_Category"
@@ -78,7 +82,7 @@
                     android:layout_margin="5dp"
                     android:text="ايرادات"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
+                    android:textColor="@color/TimeLineInActive"
 
                     />
 
@@ -96,12 +100,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_add_24px"
-            android:tint="@color/TimeLine_Acitve"
+            android:layout_gravity="center_vertical"
+            android:tint="@color/BackArrow"
             android:background="@drawable/btnpress"
             />
 
 
     </LinearLayout>
+
+
+
+
+
+
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="10dp"

@@ -22,6 +22,13 @@ public interface CategoryDao {
     LiveData< List<Category>> loadAllCategories();
 
 
+    @Query("SELECT * from Category")
+    List<Category> loadAllCategoriesList();
+
+
+    @Query("DELETE FROM Category")
+    void DeleteTable();
+
     @Query("SELECT * from Category where type = 'Income'")
     LiveData< List<Category>> loadIncomesCategories();
 

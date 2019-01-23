@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mahmoudbahaa.expenses.AppExecutors;
+import com.example.mahmoudbahaa.expenses.data.AppDatabase;
+import com.example.mahmoudbahaa.expenses.models.Account;
 import com.example.mahmoudbahaa.expenses.models.Expense;
 
 import java.text.SimpleDateFormat;
@@ -64,20 +67,23 @@ public class ExpenseAdapter  extends RecyclerView.Adapter<ExpenseAdapter.MyviewH
        // holder.ExpensesStar.setImageResource(ContextCompat.getDrawable(context, R.drawable.ic_baseline_stars_24px));
         {
             ImageViewCompat.setImageTintList(holder.ExpensesStar, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.income)));
-            holder.ExpensesPrice.setText(expense.getPrice()+"$");
+          //  holder.ExpensesPrice.setText(expense.getPrice()+"$");
+            holder.ExpensesPrice.setText(expense.getPrice()+"");
             holder.ExpensesPrice.setTextColor(ContextCompat.getColor(context,R.color.money_income));
 
         }
         else {
             ImageViewCompat.setImageTintList(holder.ExpensesStar, ColorStateList.valueOf(ContextCompat.getColor(context, R.color.expense)));
-            holder.ExpensesPrice.setText("-"+expense.getPrice()+"$");
+            //holder.ExpensesPrice.setText("-"+expense.getPrice()+"$");
+            holder.ExpensesPrice.setText(expense.getPrice()+"-");
             holder.ExpensesPrice.setTextColor(ContextCompat.getColor(context,R.color.money_expense));
 
         }
 
 
+Account account = AppDatabase.getsInstance(context).accountDao().loadAcountById(expense.getAccountId());
 
-        holder.ExpensesAccount.setText(expense.getAccount());
+        holder.ExpensesAccount.setText(account.getName());
         holder.ExpensesDescription.setText(expense.getDescription());
 
     }
@@ -139,6 +145,33 @@ public class ExpenseAdapter  extends RecyclerView.Adapter<ExpenseAdapter.MyviewH
 
 
 
+    }
+
+    public void removeItem(final int position) {
+
+        final Expense TempPostionDeleted = data.get(position);
+        data.remove(position);
+        // notify the item removed by position
+        // to perform recycler view delete animations
+        // NOTE: don't call notifyDataSetChanged()
+        notifyItemRemoved(position);
+
+        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                AppDatabase.getsInstance(context).expenseDao().deleteExpense(TempPostionDeleted);
+            }
+        });
+    }
+
+    public void restoreItem(Expense item, int position) {
+        data.add(position, item);
+        // notify item added by position
+        notifyItemInserted(position);
+    }
+
+    public Context getContext(){
+        return context;
     }
 
 

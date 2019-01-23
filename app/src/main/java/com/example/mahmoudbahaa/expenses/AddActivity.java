@@ -1,5 +1,6 @@
 package com.example.mahmoudbahaa.expenses;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.LiveData;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,6 +40,7 @@ import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Account;
 import com.example.mahmoudbahaa.expenses.models.Category;
 import com.example.mahmoudbahaa.expenses.models.Expense;
+import com.example.mahmoudbahaa.expenses.models.Sequence;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -93,6 +96,11 @@ public class AddActivity extends AppCompatActivity {
     TextView Add_Income_Text;
 
 
+    @BindView(R.id.Add_Category)
+    LinearLayout Add_Category;
+
+
+
     @BindView(R.id.AddActivity_FirstLayout)
 LinearLayout FirstLayout;
 
@@ -145,6 +153,9 @@ LinearLayout FirstLayout;
 
 
 
+
+
+
     String Type = "Outcome";
 
 String FileName = "";
@@ -182,6 +193,7 @@ String FileName = "";
     TextView AccountText;
 
 
+    Boolean Update = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,10 +202,17 @@ String FileName = "";
         ButterKnife.bind(this);
 
         mDb = AppDatabase.getsInstance(getApplicationContext());
+
+        if (getIntent().hasExtra("date"))
+        {
+            long date = getIntent().getLongExtra("date", myCalendar.getTimeInMillis());
+            myCalendar.setTimeInMillis(date);
+        }
+
+
         initDatePicker();
 
         setTimeLineClick(0);
-        askPermissions();
 
         PhotoLayout.setVisibility(View.GONE);
         MemoLayout.setVisibility(View.GONE);
@@ -201,6 +220,7 @@ String FileName = "";
    if (savedInstanceState==null) {
     if (getIntent().hasExtra("Expense")) {
 
+        Update = true;
 
         expense = (Expense) getIntent().getParcelableExtra("Expense");
 
@@ -225,13 +245,14 @@ else {
 
 
      myCalendar.setTimeInMillis(expense.getCreatedAt().getTime());
+     Update = true;
 
  }
 
- account = (Account) savedInstanceState.getSerializable("Account");
- categoryIncome = (Category) savedInstanceState.getSerializable("categoryIncome");
- categoryOutcome = (Category) savedInstanceState.getSerializable("categoryOutcome") ;
- Type = savedInstanceState.getString("Type");
+  account = (Account) savedInstanceState.getSerializable("Account");
+  categoryIncome = (Category) savedInstanceState.getSerializable("categoryIncome");
+  categoryOutcome = (Category) savedInstanceState.getSerializable("categoryOutcome") ;
+   Type = savedInstanceState.getString("Type");
     myCalendar.setTimeInMillis(savedInstanceState.getLong("Date"));
 
     Memo = savedInstanceState.getString("Memo");
@@ -323,23 +344,34 @@ else {
 
     void getCategory()
     {
-        LiveData<Category> category1   = mDb.categoryDao().findCategory(expense.getCategoryId());
+        final LiveData<Category> category2   = mDb.categoryDao().findCategory(expense.getCategoryId());
 
-        category1.observe(this, new Observer<Category>() {
+        category2.observe(this, new Observer<Category>() {
             @Override
             public void onChanged(@Nullable Category category1) {
 
 
-                category = category1;
+             //   category = category1;
+
+                Log.v("ExpenseCategoryType",category1.getType()+"1");
 
                 if (category1.getType().equals("Income"))
                 {
+
+LoadDefaultOutcomeCategory();
+
                     categoryIncome = category1;
+                    Log.v("ExpenseCategoryType",categoryIncome.getType()+"2");
                 }
                 else if (category1.getType().equals("Outcome"))
                 {
+                    LoadDeafultIncomeCategory();
+
                     categoryOutcome = category1;
+                    Log.v("ExpenseCategoryType",categoryOutcome.getType()+"3");
                 }
+
+                category2.removeObserver(this);
 
                 CategoryText.setText(category1.getName());
 
@@ -353,14 +385,16 @@ else {
 
         void GetDefaultAccount(){
 
-            LiveData<Account> account1   = mDb.accountDao().LoadDefaultAccount(true);
+            final LiveData<Account> account2   = mDb.accountDao().LoadDefaultAccount(true);
 
-            account1.observe(this, new Observer<Account>() {
+            account2.observe(this, new Observer<Account>() {
                 @Override
                 public void onChanged(@Nullable Account account1) {
                     account = account1;
 
                     AccountText.setText(account.getName());
+
+                    account2.removeObserver(this);
                 }
             });
 
@@ -369,9 +403,9 @@ else {
 
         void GetDefaultCategory(){
 
-            LiveData<Category> category1   = mDb.categoryDao().LoadDefaultIncome(true);
+            final LiveData<Category> category1Live   = mDb.categoryDao().LoadDefaultIncome(true);
 
-            category1.observe(this, new Observer<Category>() {
+            category1Live.observe(this, new Observer<Category>() {
                 @Override
                 public void onChanged(@Nullable Category category1) {
               //      category = category1;
@@ -383,18 +417,18 @@ else {
                     if (Type.equals("Income"))
                         CategoryText.setText(categoryIncome.getName());
 
-
+                    category1Live.removeObserver(this);
                 }
             });
 
 
 
-            LiveData<Category> category2  = mDb.categoryDao().LoadDefaultOutCome(true);
+           final LiveData<Category> category2Live  = mDb.categoryDao().LoadDefaultOutCome(true);
 
-            category2.observe(this, new Observer<Category>() {
+            category2Live.observe(this, new Observer<Category>() {
                 @Override
                 public void onChanged(@Nullable Category category1) {
-                    //      category = category1;
+                         category = category1;
 
                     //    CategoryText.setText(category.getName());
 
@@ -404,7 +438,56 @@ else {
                         CategoryText.setText(categoryOutcome.getName());
 
 
+                    category2Live.removeObserver(this);
+                }
+            });
 
+        }
+
+
+
+
+
+        void LoadDeafultIncomeCategory(){
+
+            final LiveData<Category> category1Live   = mDb.categoryDao().LoadDefaultIncome(true);
+
+            category1Live.observe(this, new Observer<Category>() {
+                @Override
+                public void onChanged(@Nullable Category category1) {
+                    //      category = category1;
+
+                    //    CategoryText.setText(category.getName());
+
+                    categoryIncome = category1;
+
+                    if (Type.equals("Income"))
+                        CategoryText.setText(categoryIncome.getName());
+
+                    category1Live.removeObserver(this);
+                }
+            });
+
+        }
+
+        void LoadDefaultOutcomeCategory(){
+
+            final LiveData<Category> category2Live  = mDb.categoryDao().LoadDefaultOutCome(true);
+
+            category2Live.observe(this, new Observer<Category>() {
+                @Override
+                public void onChanged(@Nullable Category category1) {
+                    category = category1;
+
+                    //    CategoryText.setText(category.getName());
+
+                    categoryOutcome = category1;
+
+                    if (Type.equals("Outcome"))
+                        CategoryText.setText(categoryOutcome.getName());
+
+
+                    category2Live.removeObserver(this);
                 }
             });
 
@@ -485,21 +568,29 @@ Price.setText(expense.getPrice()+"");
 
     @OnClick(R.id.AddActivity_Category)
     void onCategoryChange(){
-        Intent i = new Intent(AddActivity.this,EditCategory.class);
-        i.putExtra("Type",Type);
-        i.putExtra("Category",category);
 
-        if (Type.equals("Outcome"))
+        if (Type.equals("Outcome")){
+            Intent i = new Intent(AddActivity.this,EditCategoryOutcome.class);
             i.putExtra("Category",categoryOutcome);
-        else if (Type.equals("Income"))
-            i.putExtra("Category",categoryIncome);
+            i.putExtra("Type",Type);
+            i.putExtra("ScreenType","Add");
+            startActivityForResult(i,500);
+
+
+        }
+        else if (Type.equals("Income")) {
+            Intent i = new Intent(AddActivity.this,EditCategoryIncome.class);
+            i.putExtra("Type",Type);
+            i.putExtra("Category", categoryIncome);
+            i.putExtra("ScreenType","Add");
+            startActivityForResult(i,500);
+
+
+        }
 
 
 
-        i.putExtra("ScreenType","Add");
 
-
-        startActivityForResult(i,500);
     }
 
 
@@ -539,6 +630,18 @@ Price.setText(expense.getPrice()+"");
 
     }
 
+
+
+    @OnClick(R.id.AddActivity_PhotoImage)
+    void EnlargeImage(){
+
+        Intent i = new Intent(AddActivity.this,EnlargeImage.class);
+        i.putExtra("ImagePath",FinalImagePath);
+        startActivity(i);
+
+
+    }
+
     private void updateLabel() {
 
         String DayFormatName = "ddd";
@@ -560,6 +663,9 @@ Price.setText(expense.getPrice()+"");
     void OnOutComeClick() {
         setTimeLineClick(0);
         Type = "Outcome";
+
+
+
         CategoryText.setText(categoryOutcome.getName());
 
     }
@@ -578,7 +684,7 @@ Price.setText(expense.getPrice()+"");
     @OnClick(R.id.AddActivity_done)
     void onDone(){
 
-
+Log.v("Update",Update+"");
 
 
         if (TextUtils.isEmpty( this.Description.getText().toString()) || TextUtils.isEmpty(this.Price.getText().toString()))
@@ -598,33 +704,111 @@ Price.setText(expense.getPrice()+"");
        Log.v("dateadded",myCalendar.getTime()+"");
 
 
-if (Type.equals("Income")) {
-    final Expense expense = new Expense(Description, categoryIncome.getName(), account.getName(), Type, price, myCalendar.getTime(), Memo, FinalImagePath, account.getId(), categoryIncome.getId());
+ if (Type.equals("Income")) {
+
+if (!Update) {
+    Sequence seq = mDb.sequenceDao().loadExpenseSeq();
+
+    seq.setSeq(seq.getSeq() + 1);
+    final Expense expense = new Expense(seq.getSeq(), Description, Type, price, myCalendar.getTime(), Memo, FinalImagePath, account.getId(), categoryIncome.getId());
+
+    float currentTotal = account.getTotal();
+    currentTotal = currentTotal + price;
+
+    account.setTotal(currentTotal);
+
+    final Sequence seqUpdated = seq;
 
     AppExecutors.getInstance().diskIO().execute(new Runnable() {
         @Override
         public void run() {
             mDb.expenseDao().insertExpense(expense);
+            mDb.accountDao().UpdateAccount(account);
+            mDb.sequenceDao().UpdateExpenseSeq(seqUpdated);
+            finish();
+
+        }
+    });
+}
+
+else if (Update){
+    float currentTotal = account.getTotal();
+    currentTotal = currentTotal - this.expense.getPrice() + price;
+    account.setTotal(currentTotal);
+    final Expense expense = new Expense(this.expense.getId(), Description, Type, price, myCalendar.getTime(), Memo, FinalImagePath, account.getId(), categoryIncome.getId());
+
+
+
+    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+        @Override
+        public void run() {
+            mDb.expenseDao().UpdateExpense(expense);
+            mDb.accountDao().UpdateAccount(account);
             finish();
 
         }
     });
 
 
+}
+
 
 }
 
             if (Type.equals("Outcome")) {
-                final Expense expense = new Expense(Description, categoryOutcome.getName(), account.getName(), Type, price, myCalendar.getTime(), Memo, FinalImagePath, account.getId(), categoryOutcome.getId());
 
+
+                if (!Update){
+                    Sequence seq = mDb.sequenceDao().loadExpenseSeq();
+
+                seq.setSeq(seq.getSeq() + 1);
+
+                final Expense expense = new Expense(seq.getSeq(), Description, Type, price, myCalendar.getTime(), Memo, FinalImagePath, account.getId(), categoryOutcome.getId());
+
+                float currentTotal = account.getTotal();
+                currentTotal = currentTotal - price;
+
+                account.setTotal(currentTotal);
+
+                final Sequence seqUpdated = seq;
                 AppExecutors.getInstance().diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
+                        mDb.sequenceDao().UpdateExpenseSeq(seqUpdated);
                         mDb.expenseDao().insertExpense(expense);
+                        mDb.accountDao().UpdateAccount(account);
+
                         finish();
 
                     }
                 });
+
+
+
+
+
+            }
+
+            else if (Update){
+
+                    float currentTotal = account.getTotal();
+                    currentTotal = currentTotal - this.expense.getPrice() + price;
+                    account.setTotal(currentTotal);
+                    final Expense expense = new Expense(this.expense.getId(), Description, Type, price, myCalendar.getTime(), Memo, FinalImagePath, account.getId(), categoryOutcome.getId());
+
+
+                    AppExecutors.getInstance().diskIO().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDb.expenseDao().UpdateExpense(expense);
+                            mDb.accountDao().UpdateAccount(account);
+                            finish();
+
+                        }
+                    });
+                }
+
+
             }
 
 
@@ -668,10 +852,20 @@ if (Type.equals("Income")) {
 
                 else
                     Add_Income.setBackgroundTintList(ContextCompat.getColorStateList(AddActivity.this, R.color.Add_pink_Category));
+
                 Add_Income_Text.setTextColor(getResources().getColor(R.color.white));
 
                FirstLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.expense));
                 SecondLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.expense));
+
+
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+                    Add_Category.setBackgroundColor(getResources().getColor(R.color.Add_pink_Category));
+
+                else
+                    Add_Category.setBackgroundTintList(ContextCompat.getColorStateList(AddActivity.this, R.color.Add_pink_Category));
+
+
 
 
 
@@ -688,24 +882,35 @@ if (Type.equals("Income")) {
                     Add_Income.setBackgroundTintList(ContextCompat.getColorStateList(AddActivity.this, R.color.white));
 
 
-                Add_Income_Text.setTextColor(getResources().getColor(R.color.pink));
+                Add_Income_Text.setTextColor(getResources().getColor(R.color.Income_Rect_Text));
 
 
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
-                    Add_OutCome.setBackgroundColor(getResources().getColor(R.color.Add_pink_Category));
+                    Add_OutCome.setBackgroundColor(getResources().getColor(R.color.Income_RectSmall_BachGround));
 
                 else
-                    Add_OutCome.setBackgroundTintList(ContextCompat.getColorStateList(AddActivity.this, R.color.Add_pink_Category));
+                    Add_OutCome.setBackgroundTintList(ContextCompat.getColorStateList(AddActivity.this, R.color.Income_RectSmall_BachGround));
                     Add_OutCome_Text.setTextColor(getResources().getColor(R.color.white));
 
 
-                FirstLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.income));
-                SecondLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.income));
+
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
+                    Add_Category.setBackgroundColor(getResources().getColor(R.color.Income_RectSmall_BachGround));
+
+                else
+                    Add_Category.setBackgroundTintList(ContextCompat.getColorStateList(AddActivity.this, R.color.Income_RectSmall_BachGround));
+
+
+
+
+                FirstLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.Income_RectBig_BachGround));
+                SecondLayout.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.Income_RectBig_BachGround));
 
                 break;
 
 
         }
+
 
 
     }
@@ -721,8 +926,51 @@ if (Type.equals("Income")) {
     void OpenAddCameraPhoto(){
         //openGallery();
        // captureImage();
+      //  askPermissions();
 
-        showPictureDialog();
+
+        String[] permissions = {
+                "android.permission.READ_EXTERNAL_STORAGE",
+                "android.permission.WRITE_EXTERNAL_STORAGE"
+        };
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},200);
+
+            }
+            else{
+                showPictureDialog();
+
+            }
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 200: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! do the
+                    // calendar task you need to do.
+
+                    showPictureDialog();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'switch' lines to check for other
+            // permissions this app might request
+        }
     }
 
 
@@ -863,7 +1111,7 @@ break;
 
 
             case 500:
-
+Log.v("ResultCode",resultCode+"");
                 if (resultCode == RESULT_OK) {
                     Category category = (Category) data.getSerializableExtra("Category");
 
@@ -872,9 +1120,11 @@ break;
                     else
                         this.categoryIncome = category;
 
+                    Log.v("Add3","add3");
+Log.v("Add3",category.getName()+"");
+                   CategoryText.setText(category.getName()+"");
 
 
-                    CategoryText.setText(category.getName());
                 }
                 break;
 
@@ -882,7 +1132,7 @@ break;
                 if (resultCode == RESULT_OK){
                 Account account=(Account) data.getSerializableExtra("Account");
                 this.account = account;
-                AccountText.setText(this.account.getName());
+                AccountText.setText(this.account.getName()+"");
                 }
                 break;
 

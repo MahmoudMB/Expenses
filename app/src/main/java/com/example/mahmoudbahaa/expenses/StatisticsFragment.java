@@ -2,6 +2,7 @@ package com.example.mahmoudbahaa.expenses;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,6 +30,7 @@ import com.example.mahmoudbahaa.expenses.models.Account;
 import com.example.mahmoudbahaa.expenses.models.Expense;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -76,20 +79,42 @@ public class StatisticsFragment extends Fragment implements AccountAdapter.ListI
     ImageView AccountArrow;
 
 
+    @BindView(R.id.Statistics_CurrentAccountName)
+    TextView CurrentAccountName;
+
+
+
+    @BindView(R.id.Statistics_PieChart)
+    com.github.mikephil.charting.charts.PieChart pie;
+
+
+    @BindView(R.id.Statistics_NoData)
+    TextView NoDataText;
+
+
+    int TimeLine_ID = 0;
+
+    /*
     @BindView(R.id.Statistics_Overlay)
-    RelativeLayout OverLay;
+    RelativeLayout OverLay;*/
 
-
+/*
     @BindView(R.id.RecyclerLayout)
             LinearLayout RecyclerLayout;
+    */
+
     @BindView(R.id.ShowLastLayout)
     LinearLayout ShowLastLayout;
 
 
 
-    private int CurrentAccount = 0;
+    private int CurrentAccount =0;
 
     List<Account> accounts = new ArrayList<>();
+
+
+
+    Account init = new Account(0,"جميع الحسابات",0,"#47d469",false);
     private RecyclerView accountRecycler;
     private AccountAdapter accountAdapter;
     View rootView;
@@ -97,6 +122,13 @@ public class StatisticsFragment extends Fragment implements AccountAdapter.ListI
 
     final Calendar myCalendar = Calendar.getInstance();
     private AppDatabase mDb;
+
+     int CurrentAccountId = 0;
+
+
+
+    AlertDialog dialog;
+    View yourCustomView;
 
 
 
@@ -109,10 +141,14 @@ public class StatisticsFragment extends Fragment implements AccountAdapter.ListI
         mDb = AppDatabase.getsInstance(getActivity());
 
         ButterKnife.bind(this,rootView);
-        initStatisticsRecycler();
-        //initPieChart();
-        insertDummyAccounts();
+        initDialouge();
+        init.setStatus(true);
 
+      //  initStatisticsRecycler();
+        //initPieChart();
+     //   insertDummyAccounts();
+
+        LoadAccounts();
 
 
         LocalDate weekBeforeToday = LocalDate.now().minusDays(7);
@@ -139,6 +175,75 @@ public class StatisticsFragment extends Fragment implements AccountAdapter.ListI
     }
 
 
+
+
+
+    void ShowData(){
+        pie.setVisibility(View.VISIBLE);
+                NoDataText.setVisibility(View.GONE);
+    }
+
+    void ShowNoData(){
+        pie.setVisibility(View.INVISIBLE);
+        NoDataText.setVisibility(View.VISIBLE);
+
+    }
+
+    void initDialouge(){
+        LayoutInflater inflater2 = LayoutInflater.from(getActivity());
+
+        yourCustomView = inflater2.inflate(R.layout.dialouge_accounts, null);
+        initStatisticsRecycler();
+
+
+        dialog = new AlertDialog.Builder(getActivity())
+                .setView(yourCustomView)
+
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+
+                        AccountArrow.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.ic_baseline_keyboard_arrow_down_24px));
+                        AccountArrow.setTag("false");
+                    }
+                })
+
+
+                .create();
+        /*
+
+
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                        // final TextView etName = (EditText) yourCustomView.findViewById(R.id.EnterCategoryOption);
+
+
+
+
+
+                    }
+                })
+                .setNegativeButton("Cancel", null).create();*/
+
+        /*
+        Rect displayRectangle = new Rect();
+        Window window = getWindow();
+
+        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+
+        dialog.getWindow().setLayout((int)(displayRectangle.width() *
+                0.9f), (int)(displayRectangle.height() * 0.9f));
+
+
+        dialog.getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+*/
+
+
+
+
+    }
 
     void GetLast7Days(){
 
@@ -168,6 +273,9 @@ public class StatisticsFragment extends Fragment implements AccountAdapter.ListI
                 initPieChart(OutcomesAndIncomes.get(0).intValue(),OutcomesAndIncomes.get(1).intValue());
 
                 expenses1.removeObserver(this);
+
+
+
             }
         });
 
@@ -273,11 +381,143 @@ Log.v("size",expenses.size()+"");
     }
 
 
+    void GetLast7Days(int id){
+
+        //   Long start = getStartOfLast7Days(myCalendar);
+
+        //     Long end = getEndOfToDay(myCalendar);
+
+
+
+
+        Long start =  LocalDate.now().minusDays(7).toDateTimeAtStartOfDay().getMillis();
+        Long end =  LocalDate.now().plusDays(1).toDateTimeAtStartOfDay().getMillis();
+
+
+        Log.v("start",start+"");
+        Log.v("end",end+"");
+        final LiveData<List<Expense>> expenses1   = mDb.expenseDao().loadExpeseByAccountId(start,end,CurrentAccountId);
+
+        expenses1.observe(this, new Observer<List<Expense>>() {
+            @Override
+            public void onChanged(@Nullable List<Expense> expenses) {
+
+
+
+                ArrayList<Float> OutcomesAndIncomes  =   CalculateOutcomesAndIncomes(expenses);
+
+                initPieChart(OutcomesAndIncomes.get(0).intValue(),OutcomesAndIncomes.get(1).intValue());
+
+                expenses1.removeObserver(this);
+            }
+        });
+
+
+
+
+
+    }
+
+    void GetLastMonth(int id){
+
+        Long start =  LocalDate.now().minusMonths(1).toDateTimeAtStartOfDay().getMillis();
+        Long end =  LocalDate.now().plusDays(1).toDateTimeAtStartOfDay().getMillis();
+
+
+
+
+        Log.v("start",start+"");
+        Log.v("end",end+"");
+        final LiveData<List<Expense>> expenses1   = mDb.expenseDao().loadExpeseByAccountId(start,end,CurrentAccountId);
+
+        expenses1.observe(this, new Observer<List<Expense>>() {
+            @Override
+            public void onChanged(@Nullable List<Expense> expenses) {
+
+
+                Log.v("size",expenses.size()+"");
+                ArrayList<Float> OutcomesAndIncomes  =   CalculateOutcomesAndIncomes(expenses);
+
+                initPieChart(OutcomesAndIncomes.get(0).intValue(),OutcomesAndIncomes.get(1).intValue());
+
+                expenses1.removeObserver(this);
+            }
+        });
+
+
+
+
+
+    }
+
+    void GetLast6Months(int id){
+
+
+        Long start =  LocalDate.now().minusMonths(6).toDateTimeAtStartOfDay().getMillis();
+        Long end =  LocalDate.now().plusDays(1).toDateTimeAtStartOfDay().getMillis();
+
+
+        Log.v("start",start+"");
+        Log.v("end",end+"");
+
+        final LiveData<List<Expense>> expenses1   = mDb.expenseDao().loadExpeseByAccountId(start,end,CurrentAccountId);
+
+        expenses1.observe(this, new Observer<List<Expense>>() {
+            @Override
+            public void onChanged(@Nullable List<Expense> expenses) {
+
+
+
+                ArrayList<Float> OutcomesAndIncomes  =   CalculateOutcomesAndIncomes(expenses);
+
+                initPieChart(OutcomesAndIncomes.get(0).intValue(),OutcomesAndIncomes.get(1).intValue());
+
+                expenses1.removeObserver(this);
+            }
+        });
+
+
+
+
+
+    }
+
+    void GetLastYear(int id){
+        Long start =  LocalDate.now().minusYears(1).toDateTimeAtStartOfDay().getMillis();
+
+        Long end =  LocalDate.now().plusDays(1).toDateTimeAtStartOfDay().getMillis();
+
+
+        Log.v("start",start+"");
+        Log.v("end",end+"");
+
+        final LiveData<List<Expense>> expenses1   = mDb.expenseDao().loadExpeseByAccountId(start,end,CurrentAccountId);
+
+        expenses1.observe(this, new Observer<List<Expense>>() {
+            @Override
+            public void onChanged(@Nullable List<Expense> expenses) {
+
+
+
+                ArrayList<Float> OutcomesAndIncomes  =   CalculateOutcomesAndIncomes(expenses);
+
+                initPieChart(OutcomesAndIncomes.get(0).intValue(),OutcomesAndIncomes.get(1).intValue());
+
+                expenses1.removeObserver(this);
+            }
+        });
+
+
+
+
+
+    }
+
 
 
     void initStatisticsRecycler(){
 
-       accountRecycler = rootView.findViewById(R.id.Statistics_AccountRecycler);
+       accountRecycler = yourCustomView.findViewById(R.id.Statistics_AccountRecycler);
        accountAdapter = new AccountAdapter(getActivity(),accounts,this);
 
        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -289,41 +529,43 @@ Log.v("size",expenses.size()+"");
     }
 
 
-    void insertDummyAccounts(){
 
 
-       Account a = new Account();
+    void LoadAccounts()
+    {
 
-       a.setStatus(true);
-       a.setId(1);
-       a.setName("الحساب الاساسي");
-       a.setIcon("ic_baseline_account_balance_24px");
-       accounts.add(a);
+        final LiveData<List<Account>> c = mDb.accountDao().loadAllAccounts();
 
+        c.observe(this, new Observer<List<Account>>() {
+            @Override
+            public void onChanged(@Nullable List<Account> accounts1) {
 
-        a = new Account();
-
-        a.setStatus(false);
-        a.setId(2);
-        a.setName("حساب الراجحي");
-        a.setIcon("ic_baseline_account_balance_24px");
-        accounts.add(a);
+                accounts.clear();
+                accounts.addAll(accounts1);
 
 
+                init.setTotal(voidGetTotalAccountsPrices());
+                accounts.add(0,init);
+                accountAdapter.notifyDataSetChanged();
 
-        a = new Account();
+                c.removeObserver(this);
 
-        a.setStatus(false);
-        a.setId(3);
-        a.setName("حساب الاهلي");
-        a.setIcon("ic_baseline_account_balance_24px");
-        accounts.add(a);
+            }
+        });
 
-
-
-   }
+    }
 
 
+  float  voidGetTotalAccountsPrices(){
+
+        float total = 0;
+
+        for(int i=0;i<accounts.size();i++)
+        {
+            total+=accounts.get(i).getTotal();
+        }
+        return total;
+    }
 
    ArrayList<Float> CalculateOutcomesAndIncomes(List<Expense> expenses){
 
@@ -360,39 +602,113 @@ Log.v("size",expenses.size()+"");
     @Override
     public void onListItemClick(int clickedItemIndex) {
 
+
+
          accounts.get(clickedItemIndex).setStatus(true);
          accounts.get(CurrentAccount).setStatus(false);
          accountAdapter.notifyDataSetChanged();
         CurrentAccount = clickedItemIndex;
+        CurrentAccountId = accounts.get(clickedItemIndex).getId();
+
+        CurrentAccountName.setText(accounts.get(clickedItemIndex).getName()+"");
 
 
+        //Hide Dialouge
+        AccountArrow.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.ic_baseline_keyboard_arrow_down_24px));
+        AccountArrow.setTag("false");
+        dialog.hide();
 
+        GetStatistticsData(TimeLine_ID);
 
     }
 
 
+    void Get7Days(){
+        if (CurrentAccount>0)
+            GetLast7Days(CurrentAccountId);
+
+        else
+            GetLast7Days();
+
+    }
+
+    void GetMonth(){
+        if (CurrentAccount>0)
+            GetLastMonth(CurrentAccountId);
+        else
+            GetLastMonth();
+    }
+
+
+    void Get6Months(){
+        if (CurrentAccount>0)
+            GetLast6Months(CurrentAccountId);
+        else
+            GetLast6Months();
+    }
+
+    void GetYear(){
+        if (CurrentAccount>0)
+            GetLastYear(CurrentAccountId);
+        else
+            GetLastYear();
+    }
+
+
+
+    void GetStatistticsData(int id){
+
+        switch (id){
+
+            case 0:
+                Get7Days();
+                break;
+
+            case 1:
+                GetMonth();
+                break;
+
+            case 2:
+                Get6Months();
+                break;
+            case 3:
+                GetYear();
+                break;
+
+
+        }
+
+
+    }
+
     @OnClick(R.id.Statistics_TimeLine_days)
     void daysClick(){
+        TimeLine_ID = 0;
         setTimeLineClick(0);
-        GetLast7Days();
+ Get7Days();
     }
 
     @OnClick(R.id.Statistics_TimeLine_month)
     void monthClick(){
+        TimeLine_ID = 1;
         setTimeLineClick(1);
-        GetLastMonth();
+GetMonth();
     }
 
     @OnClick(R.id.Statistics_TimeLine_6months)
     void monthsClick(){
+        TimeLine_ID = 2;
         setTimeLineClick(2);
-        GetLast6Months();
+Get6Months();
+
     }
 
     @OnClick(R.id.Statistics_TimeLine_year)
     void yearClick(){
+        TimeLine_ID = 3;
         setTimeLineClick(3);
-        GetLastYear();
+        GetYear();
+
     }
 
 
@@ -423,7 +739,7 @@ Log.v("size",expenses.size()+"");
 
                 TimeLine_month.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
-                TimeLine_month_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_month_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
@@ -433,7 +749,7 @@ Log.v("size",expenses.size()+"");
                     TimeLine_6months.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
 
-                TimeLine_6months_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_6months_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
 
@@ -442,7 +758,7 @@ Log.v("size",expenses.size()+"");
 
                 else
                     TimeLine_year.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
-                TimeLine_year_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_year_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
                 break;
 
@@ -457,7 +773,7 @@ Log.v("size",expenses.size()+"");
                     TimeLine_days.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
 
-                TimeLine_days_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_days_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
 
@@ -478,7 +794,7 @@ Log.v("size",expenses.size()+"");
                     TimeLine_6months.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
 
-                TimeLine_6months_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_6months_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
 
@@ -487,7 +803,7 @@ Log.v("size",expenses.size()+"");
 
                 else
                     TimeLine_year.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
-                TimeLine_year_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_year_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
                 break;
 
@@ -502,7 +818,7 @@ Log.v("size",expenses.size()+"");
                     TimeLine_days.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
 
-                TimeLine_days_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_days_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
 
@@ -513,7 +829,7 @@ Log.v("size",expenses.size()+"");
 
                     TimeLine_month.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
-                TimeLine_month_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_month_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
@@ -532,7 +848,7 @@ Log.v("size",expenses.size()+"");
 
                 else
                     TimeLine_year.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
-                TimeLine_year_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_year_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
                 break;
 
@@ -548,7 +864,7 @@ Log.v("size",expenses.size()+"");
                     TimeLine_days.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
 
-                TimeLine_days_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_days_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
 
@@ -559,7 +875,7 @@ Log.v("size",expenses.size()+"");
 
                     TimeLine_month.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
-                TimeLine_month_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_month_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
@@ -569,7 +885,7 @@ Log.v("size",expenses.size()+"");
                     TimeLine_6months.setBackgroundTintList(ContextCompat.getColorStateList(getActivity(), R.color.TimeLine_InAcitve));
 
 
-                TimeLine_6months_Text.setTextColor(getResources().getColor(R.color.white));
+                TimeLine_6months_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
 
@@ -591,6 +907,16 @@ Log.v("size",expenses.size()+"");
     void initPieChart(int Outcomes,int Incomes){
 
 
+
+
+        if (Outcomes <= 0 && Incomes <=0)
+        {
+            ShowNoData();
+        }
+        else{
+            ShowData();
+
+
         List<PieEntry> entries = new ArrayList<>();
         Chart<PieData> pieChart = rootView.findViewById(R.id.Statistics_PieChart);
 
@@ -605,7 +931,7 @@ Log.v("size",expenses.size()+"");
         for(int c: MY_COLORS) colors.add(c);
 
 
-        PieDataSet set = new PieDataSet(entries, "Election Results");
+        PieDataSet set = new PieDataSet(entries, "");
         set.setColors(colors);
         set.setValueTextSize(25f);
         set.setValueTextColor(Color.rgb(255,255,255));
@@ -617,16 +943,29 @@ Log.v("size",expenses.size()+"");
         description.setText("");
         pieChart.setDescription(description);
 
-        pieChart.getLegend().setEnabled(false);
-        pieChart.animate();
+
+
+        pieChart.getLegend().setEnabled(true);
+
+
+            pieChart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            pieChart.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+            pieChart.getLegend().setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            pieChart.getLegend().setDrawInside(true);
+
+
+
+            pieChart.animate();
 
         pieChart.setData(data);
         pieChart.invalidate(); // refresh
+
+        }
     }
 
 
 
-    @OnClick(R.id.Statistics_AccountArrow)
+    @OnClick(R.id.Statistics_AccountSpinner)
     void OpenAccounts(){
 
         if (AccountArrow.getTag().equals("false"))
@@ -636,10 +975,8 @@ Log.v("size",expenses.size()+"");
 
             AccountArrow.setTag("true");
 
-            RecyclerLayout.setVisibility(View.VISIBLE);
-            OverLay.setVisibility(View.VISIBLE);
+            dialog.show();
 
-            ShowLastLayout.setVisibility(View.GONE);
 
         }
 
@@ -647,16 +984,11 @@ Log.v("size",expenses.size()+"");
             {
 
                 AccountArrow.setImageDrawable(ContextCompat.getDrawable(getActivity(),R.drawable.ic_baseline_keyboard_arrow_down_24px));
-
-
                 AccountArrow.setTag("false");
-
-
-                RecyclerLayout.setVisibility(View.GONE);
-                OverLay.setVisibility(View.GONE);
-                ShowLastLayout.setVisibility(View.VISIBLE);
-
+                dialog.hide();
             }
+
+
 
 
     }

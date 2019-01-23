@@ -9,10 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 
 import com.example.mahmoudbahaa.expenses.adapters.AccountAdapter;
+import com.example.mahmoudbahaa.expenses.adapters.AccountSwipeToDeleteCallback;
 import com.example.mahmoudbahaa.expenses.adapters.CategoryAdapter;
+import com.example.mahmoudbahaa.expenses.adapters.ExpenseSwipeToDeleteCallback;
 import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Account;
 import com.example.mahmoudbahaa.expenses.models.Category;
@@ -91,45 +94,16 @@ public class EditAccount extends AppCompatActivity implements AccountAdapter.Lis
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new AccountSwipeToDeleteCallback(accountAdapter));
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
         recyclerView.setAdapter(accountAdapter);
 
     }
-
-    void insertDummyAccounts(){
-
-
-        Account a = new Account();
-
-        a.setStatus(true);
-        a.setId(1);
-        a.setName("الحساب الاساسي");
-        a.setIcon("ic_baseline_account_balance_24px");
-        accounts.add(a);
-
-
-        a = new Account();
-
-        a.setStatus(false);
-        a.setId(2);
-        a.setName("حساب الراجحي");
-        a.setIcon("ic_baseline_account_balance_24px");
-        accounts.add(a);
-
-
-
-        a = new Account();
-
-        a.setStatus(false);
-        a.setId(3);
-        a.setName("حساب الاهلي");
-        a.setIcon("ic_baseline_account_balance_24px");
-        accounts.add(a);
-
-accountAdapter.notifyDataSetChanged();
-
-
-    }
-
 
 
 

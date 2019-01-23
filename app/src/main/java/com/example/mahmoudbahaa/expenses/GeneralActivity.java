@@ -119,7 +119,7 @@ void LoadDefaultCategory()
     @OnClick(R.id.General_CategoryOutcome)
     void OpenCategoryOutcome(){
 
-        Intent i = new Intent(GeneralActivity.this,EditCategory.class);
+        Intent i = new Intent(GeneralActivity.this,EditCategoryOutcome.class);
         i.putExtra("Type","Outcome");
         i.putExtra("ScreenType","General");
         i.putExtra("Category",categoryOutcomeObj);
@@ -135,7 +135,7 @@ void LoadDefaultCategory()
     void OpenCategoryIncome(){
 
 
-        Intent i = new Intent(GeneralActivity.this,EditCategory.class);
+        Intent i = new Intent(GeneralActivity.this,EditCategoryIncome.class);
         i.putExtra("Type","Income");
         i.putExtra("Category",categoryIncomeObj);
         i.putExtra("ScreenType","General");

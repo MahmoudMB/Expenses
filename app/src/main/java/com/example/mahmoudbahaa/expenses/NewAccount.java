@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Account;
 import com.example.mahmoudbahaa.expenses.models.Category;
+import com.example.mahmoudbahaa.expenses.models.Sequence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,11 +116,17 @@ int CurrentColorIndex = 0;
         }
         else{
 
-            final Account account = new Account(accountName,Float.parseFloat(AccountTotal.getText().toString()),ColorsHexa.get(CurrentColorIndex),false);
+            Sequence seq = mDb.sequenceDao().loadAccountSeq();
+            seq.setSeq(seq.getSeq()+1);
 
+
+            final Account account = new Account(seq.getSeq(),accountName,Float.parseFloat(AccountTotal.getText().toString()),ColorsHexa.get(CurrentColorIndex),false);
+
+            final Sequence seqUpdated = seq;
             AppExecutors.getInstance().diskIO().execute(new Runnable() {
                 @Override
                 public void run() {
+                    mDb.sequenceDao().UpdateAccountSeq(seqUpdated);
                     mDb.accountDao().insertAccount(account);
                     finish();
 

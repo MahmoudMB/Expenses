@@ -64,4 +64,17 @@
 <color name="ActiveIcon">#555555</color>
 
 
+
+
+    <color name="Income_RectSmall_BachGround">#57de9c</color>
+    <color name="Income_Rect_Text">#39d88b</color>
+    <color name="Income_RectBig_BachGround">#39d88b</color>
+
+
+<color name="BackArrow">#555555</color>
+
+
+
+    <color name="TimeLineInActive">#303030</color>
+
 </resources>

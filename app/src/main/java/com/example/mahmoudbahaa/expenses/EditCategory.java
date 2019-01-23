@@ -11,6 +11,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.mahmoudbahaa.expenses.adapters.CategoryAdapter;
+import com.example.mahmoudbahaa.expenses.adapters.CategorySwipeToDeleteCallback;
 import com.example.mahmoudbahaa.expenses.adapters.ExpenseAdapter;
 import com.example.mahmoudbahaa.expenses.data.AppDatabase;
 import com.example.mahmoudbahaa.expenses.models.Category;
@@ -142,6 +144,8 @@ String ScreenType = "";
     }
 
 
+
+
     void initCategoryAsSelect(String Category){
 
         enableDisableView(findViewById(R.id.EditCategory_Category),false);
@@ -170,6 +174,9 @@ String ScreenType = "";
 
 
     }
+
+
+
 
     @OnClick(R.id.Add_OutCome)
     void OnOutComeClick() {
@@ -247,61 +254,6 @@ String ScreenType = "";
     }
 
 
-    void initInsertDummydata(){
-
-
-        Category e = new Category();
-
-        e.setId(1);
-        e.setIcon("ic_baseline_account_balance_24px");
-        e.setName("بقالة");
-        e.setStatus(false);
-
-        OutComes.add(e);
-
-        e = new Category();
-        e.setId(2);
-        e.setIcon("ic_baseline_account_balance_24px");
-        e.setName("مشتريات");
-        e.setStatus(false);
-
-        OutComes.add(e);
-
-
-        e = new Category();
-        e.setId(3);
-        e.setIcon("ic_baseline_account_balance_24px");
-        e.setName("كهرباء");
-        e.setStatus(false);
-
-        OutComes.add(e);
-
-
-        e = new Category();
-        e.setId(1);
-        e.setIcon("ic_baseline_account_balance_24px");
-        e.setName("مكافأة");
-        e.setStatus(false);
-
-        Incomes.add(e);
-
-
-
-        e = new Category();
-        e.setId(2);
-        e.setIcon("ic_baseline_account_balance_24px");
-        e.setName("راتب");
-        e.setStatus(false);
-
-        Incomes.add(e);
-
-
-        IncomeAdapter.notifyDataSetChanged();
-        OutComeAdapter.notifyDataSetChanged();
-
-
-    }
-
 
     void initAdapters(){
 
@@ -312,13 +264,28 @@ String ScreenType = "";
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         OutComeRecycler.setLayoutManager(layoutManager);
+
+
+
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(new CategorySwipeToDeleteCallback(OutComeAdapter));
+        itemTouchHelper.attachToRecyclerView(OutComeRecycler);
         OutComeRecycler.setAdapter(OutComeAdapter);
+
+
 
 
         IncomeAdapter = new CategoryAdapter(getApplicationContext(),Incomes,this);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(getApplicationContext());
         layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
         IncomeRecycler.setLayoutManager(layoutManager1);
+
+        ItemTouchHelper itemTouchHelper1 = new
+                ItemTouchHelper(new CategorySwipeToDeleteCallback(IncomeAdapter));
+        itemTouchHelper1.attachToRecyclerView(IncomeRecycler);
+
+
+
         IncomeRecycler.setAdapter(IncomeAdapter);
     }
 
@@ -345,7 +312,7 @@ String ScreenType = "";
 
                 else
                     Add_Income.setBackgroundTintList(ContextCompat.getColorStateList(EditCategory.this, R.color.TimeLine_InAcitve));
-                Add_Income_Text.setTextColor(getResources().getColor(R.color.white));
+                Add_Income_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
                 OutComeRecycler.setVisibility(View.VISIBLE);
                 IncomeRecycler.setVisibility(View.GONE);
@@ -363,7 +330,7 @@ String ScreenType = "";
                     Add_OutCome.setBackgroundTintList(ContextCompat.getColorStateList(EditCategory.this, R.color.TimeLine_InAcitve));
 
 
-                Add_OutCome_Text.setTextColor(getResources().getColor(R.color.white));
+                Add_OutCome_Text.setTextColor(getResources().getColor(R.color.TimeLineInActive));
 
 
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP)
@@ -391,8 +358,9 @@ String ScreenType = "";
     {
 
         Intent i = new Intent(EditCategory.this,NewCategory.class);
-
+         i.putExtra("Type",category);
         startActivity(i);
+
 
 
     }
@@ -401,7 +369,7 @@ String ScreenType = "";
 
 
     @Override
-    public void onListItemClick(int clickedItemIndex) {
+    public void onCategoryListItemClick(int clickedItemIndex) {
 
 
         FirstRun = false;

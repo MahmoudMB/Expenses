@@ -15,6 +15,10 @@ import com.example.mahmoudbahaa.expenses.models.Category;
 import com.example.mahmoudbahaa.expenses.models.CategoryDao;
 import com.example.mahmoudbahaa.expenses.models.Expense;
 import com.example.mahmoudbahaa.expenses.models.ExpenseDao;
+import com.example.mahmoudbahaa.expenses.models.Sequence;
+import com.example.mahmoudbahaa.expenses.models.SequenceDao;
+import com.example.mahmoudbahaa.expenses.models.Sync;
+import com.example.mahmoudbahaa.expenses.models.SyncDao;
 
 import java.util.concurrent.Executors;
 
@@ -23,7 +27,7 @@ import java.util.concurrent.Executors;
  * Created by MahmoudBahaa on 13/01/2019.
  */
 
-@Database(entities = {Expense.class, Account.class, Category.class},version = 1,exportSchema = false)
+@Database(entities = {Expense.class, Account.class, Category.class, Sequence.class, Sync.class},version = 1,exportSchema = false)
 @TypeConverters({DateConverter.class})
 
 public abstract class AppDatabase extends RoomDatabase {
@@ -38,8 +42,9 @@ public abstract class AppDatabase extends RoomDatabase {
         if (sInstance==null){
             synchronized (Lock){
                 Log.d(LOG_TAG,"Creating New Database Instance");
-                sInstance = Room.databaseBuilder(context.getApplicationContext(),AppDatabase.class,AppDatabase.DATABASE_NAME).
+                sInstance = Room.databaseBuilder(context.getApplicationContext(),AppDatabase.class,AppDatabase.DATABASE_NAME)
 
+                     /*
                         addCallback(new Callback() {
                             @Override
                             public void onCreate(@NonNull SupportSQLiteDatabase db) {
@@ -51,10 +56,13 @@ public abstract class AppDatabase extends RoomDatabase {
                                         getsInstance(context).accountDao().insertAll(Account.populateData());
                                         getsInstance(context).categoryDao().insertAll(Category.populateData());
                                     }
+
                                 });
 
                             }
                         })
+                        */
+.allowMainThreadQueries()
                         .build();
 
 
@@ -72,7 +80,9 @@ public abstract ExpenseDao expenseDao();
 
     public abstract CategoryDao categoryDao();
 
+    public abstract SequenceDao sequenceDao();
 
+       public abstract SyncDao syncDao();
 
 
 }
