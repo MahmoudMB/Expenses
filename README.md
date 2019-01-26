@@ -1,6 +1,12 @@
 
 
-Expenses App.
+	
+محفظتك - تحكم في مصاريفك وحساباتك
+
+
+لتحميل التطبيق 
+https://play.google.com/store/apps/details?id=com.mahmoudbahaa.wallet.expenses
+
 
 <img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/main.jpg"/>
 
