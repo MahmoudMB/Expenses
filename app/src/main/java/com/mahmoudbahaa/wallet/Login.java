@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mahmoudbahaa.expenses.data.AppDatabase;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
 
 import org.json.JSONException;
 

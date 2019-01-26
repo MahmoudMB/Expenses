@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
@@ -10,9 +10,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
-import com.mahmoudbahaa.expenses.adapters.ExpenseAdapter;
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Expense;
+import com.mahmoudbahaa.wallet.adapters.ExpenseAdapter;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Expense;
 
 import org.joda.time.DateTime;
 

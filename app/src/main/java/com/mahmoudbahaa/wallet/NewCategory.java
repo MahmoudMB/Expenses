@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -14,9 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Category;
-import com.mahmoudbahaa.expenses.models.Sequence;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Category;
+import com.mahmoudbahaa.wallet.models.Sequence;
 
 import java.util.ArrayList;
 import java.util.List;

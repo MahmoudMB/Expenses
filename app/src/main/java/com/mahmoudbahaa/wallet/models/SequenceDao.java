@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses.models;
+package com.mahmoudbahaa.wallet.models;
 
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;

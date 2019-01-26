@@ -8,7 +8,7 @@
     android:layoutDirection="rtl"
     android:textDirection="rtl"
     android:background="@color/white"
-    tools:context="com.example.mahmoudbahaa.expenses.AddActivity">
+    tools:context="com.mahmoudbahaa.wallet.AddActivity">
 
 
     <LinearLayout
@@ -40,10 +40,11 @@
 
 
 <TextView
+    android:id="@+id/NewAccount_Title"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="#FFFFFFFF"
-    android:text="حساب"
+    android:text="حساب جديد"
     android:layout_centerInParent="true"
     android:textSize="23sp"
     />
@@ -88,9 +89,9 @@
             android:layout_height="40dp"
 
             android:hint="الاسم"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:textAlignment="center"
-            android:textColor="#717171"
+            android:textColor="#FFFFFFFF"
             android:background="@android:color/transparent"
             android:inputType="text|textNoSuggestions"
             android:textColorHint="#AAFFFFFF"
@@ -103,11 +104,13 @@
     >
 
     <TextView
+        android:id="@+id/Total_TextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:text="المبلغ المبدأي"
-      android:textColor="#FFFFFFFF"
-        android:textSize="16sp"
+      android:textColor="#FFFFFF"
+        android:textSize="14sp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/NewAccount_price"
@@ -121,7 +124,7 @@ android:layout_alignParentBottom="true"
             android:hint="0.0"
             android:textAlignment="center"
             android:textSize="30sp"
-            android:textColor="#717171"
+            android:textColor="#FFFFFFFF"
             android:inputType="number|textNoSuggestions"
             android:textColorHint="#AAFFFFFF"
 

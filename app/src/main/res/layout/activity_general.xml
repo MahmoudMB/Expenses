@@ -6,17 +6,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layoutDirection="rtl"
-    tools:context="com.example.mahmoudbahaa.expenses.GeneralActivity">
+    tools:context="com.mahmoudbahaa.wallet.GeneralActivity">
 
 
 
     <LinearLayout
         android:background="@color/white"
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_height="wrap_content">
+        android:layout_height="50dp">
 
 
         <ImageView
@@ -26,6 +25,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_arrow_forward_ios_24px"
             android:background="@drawable/btnpress"
+android:tint="@color/BackArrow"
             />
 
 
@@ -35,21 +35,26 @@
             android:layout_weight="3"
             android:layout_height="wrap_content"
             android:text="عام"
-            android:textSize="20sp"
+            android:textSize="23sp"
             android:textAlignment="center"
-            android:textColor="#000000"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
+            android:tint="@color/BackArrow"
+
             >
 
 
-        </TextView>
+</TextView>
 
-
-
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"></View>
 
     </LinearLayout>
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="@color/grey"
+    ></View>
 
 
     <LinearLayout

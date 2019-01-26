@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Expenses</string>
+    <string name="app_name">المحفظة</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -8,5 +8,24 @@
 
     <string name="SyncData">جاري مزامنة البيانات</string>
     <string name="initData">جاري إعداد الحساب</string>
+
+
+    <string name="ERROR_INVALID_CREDENTIAL">يوجد خطأ في البيانات</string>
+    <string name="ERROR_INVALID_EMAIL">صيغة البريد الالكتروني ليست صحيحة</string>
+    <string name="ERROR_WRONG_PASSWORD">يوجد خطأ في كلمة السر</string>
+    <string name="ERROR_REQUIRES_RECENT_LOGIN">يجب تسجيل الدخول</string>
+    <string name="ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL">هذا البريد الالكتورني مسجل في النظام</string>
+    <string name="ERROR_EMAIL_ALREADY_IN_USE">هذا البريد الالكتورني مسجل في النظام</string>
+    <string name="ERROR_USER_DISABLED">هذا الحساب معطل</string>
+    <string name="ERROR_USER_TOKEN_EXPIRED">يجب تسجيل الدخول مرة اخرى</string>
+    <string name="ERROR_USER_NOT_FOUND">هذا الايميل غير موجود</string>
+
+    <string name="ERROR_INVALID_USER_TOKEN">يجب تسجيل الدخول مرة اخرى</string>
+
+    <string name="ERROR_OPERATION_NOT_ALLOWED">هذه العملية غير متاحه</string>
+
+    <string name="ERROR_WEAK_PASSWORD">الرقم السري يجب ان يكون اكثر من  6 حروف او ارقام </string>
+
+
 
 </resources>

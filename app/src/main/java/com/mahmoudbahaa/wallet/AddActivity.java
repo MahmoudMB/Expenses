@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.Manifest;
 import android.app.Activity;
@@ -34,11 +34,11 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Account;
-import com.mahmoudbahaa.expenses.models.Category;
-import com.mahmoudbahaa.expenses.models.Expense;
-import com.mahmoudbahaa.expenses.models.Sequence;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Account;
+import com.mahmoudbahaa.wallet.models.Category;
+import com.mahmoudbahaa.wallet.models.Expense;
+import com.mahmoudbahaa.wallet.models.Sequence;
 
 import java.io.File;
 import java.io.FileInputStream;

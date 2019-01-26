@@ -1,11 +1,11 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
 
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Expense;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Expense;
 
 import java.util.List;
 

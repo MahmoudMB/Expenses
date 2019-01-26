@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses.models;
+package com.mahmoudbahaa.wallet.models;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -6,7 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.mahmoudbahaa.expenses.data.AppDatabase;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
 
 import java.util.List;
 

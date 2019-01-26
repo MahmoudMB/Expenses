@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layoutDirection="rtl"
-    tools:context="com.example.mahmoudbahaa.expenses.EditCategory">
+    tools:context="com.mahmoudbahaa.wallet.EditCategory">
 
 
 
@@ -30,6 +30,7 @@
 
             android:tint="@color/BackArrow"
             android:background="@drawable/btnpress"
+
             />
 
         <LinearLayout

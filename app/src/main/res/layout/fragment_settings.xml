@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
     android:textDirection="rtl"
-    tools:context="com.example.mahmoudbahaa.expenses.SettingsFragment">
+    tools:context="com.mahmoudbahaa.wallet.SettingsFragment">
 
 
 
@@ -19,19 +19,9 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:background="@color/white"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_height="wrap_content">
+            android:layout_height="50dp">
 
 
-            <ImageView
-                android:id="@+id/AccountEdit_back"
-                android:layout_weight="0.5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_arrow_forward_ios_24px"
-                android:background="@drawable/btnpress"
-                />
 
 
             <TextView
@@ -40,26 +30,25 @@
                 android:layout_weight="3"
                 android:layout_height="wrap_content"
                 android:text="الاعدادت"
-                android:textSize="20sp"
+                android:textSize="23sp"
                 android:textAlignment="center"
-                android:textColor="#000000"
+                android:tint="@color/BackArrow"
+
                 >
 
 
             </TextView>
 
 
-            <ImageView
-                android:id="@+id/AccountEdit_AddNew"
-                android:layout_weight="0.5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_add_24px"
-                android:tint="@color/TimeLine_Acitve"
-                />
 
 
         </LinearLayout>
+        <View
+            android:layout_below="@+id/Statistics_AccountSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey"
+            ></View>
 
 
 
@@ -169,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:src="@drawable/ic_baseline_swap_horiz_24px"
+                android:src="@drawable/ic_baseline_bookmark_24px"
                 android:tint="@color/TimeLine_Acitve"
                 />
 
@@ -217,8 +206,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_weight="0.2"
-                android:src="@drawable/tag"
-                android:tint="#ff965d"
+                android:src="@drawable/ic_baseline_category_24px"
+                android:tint="@color/TimeLine_Acitve"
 
                 />
 
@@ -265,7 +254,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:src="@drawable/ic_baseline_account_balance_24px"
+                android:src="@drawable/ic_account_24"
                 android:tint="@color/TimeLine_Acitve"
                 />
 
@@ -297,9 +286,56 @@
 
 
     <LinearLayout
+        android:id="@+id/Settings_Contact"
         android:layout_marginTop="10dp"
         android:background="@color/white"
         android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <LinearLayout
+            android:background="@drawable/btnpress"
+
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:src="@drawable/ic_baseline_contact_support_24px"
+                android:tint="@color/TimeLine_Acitve"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="اتصل بنا"
+                android:layout_gravity="center"
+                android:textSize="17sp"
+                android:textColor="#171717"
+                />
+
+
+            <ImageView
+                android:layout_weight="0.3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_arrow_back_ios_24px"
+                android:layout_gravity="center"
+                android:tint="@color/grey"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:id="@+id/Settings_About"
         android:layout_height="45dp">
         <LinearLayout
             android:background="@drawable/btnpress"

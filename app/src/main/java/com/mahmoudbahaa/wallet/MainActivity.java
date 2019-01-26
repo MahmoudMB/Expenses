@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.app.DatePickerDialog;
 import android.arch.lifecycle.LiveData;
@@ -24,18 +24,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.LinearLayout;
 
-import com.mahmoudbahaa.expenses.adapters.ExpenseAdapter;
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Account;
-import com.mahmoudbahaa.expenses.models.Category;
-import com.mahmoudbahaa.expenses.models.Expense;
-import com.mahmoudbahaa.expenses.models.Sequence;
-import com.mahmoudbahaa.expenses.models.Sync;
-import com.mahmoudbahaa.expenses.services.BackUpJobService;
-import com.mahmoudbahaa.expenses.services.BackUpNowJobFireBase;
-import com.mahmoudbahaa.expenses.services.BackUpService;
-import com.mahmoudbahaa.expenses.services.SyncDataService;
-import com.mahmoudbahaa.expenses.services.BackUpJobFirebase;
+import com.mahmoudbahaa.wallet.adapters.ExpenseAdapter;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Account;
+import com.mahmoudbahaa.wallet.models.Category;
+import com.mahmoudbahaa.wallet.models.Expense;
+import com.mahmoudbahaa.wallet.models.Sequence;
+import com.mahmoudbahaa.wallet.models.Sync;
+import com.mahmoudbahaa.wallet.services.BackUpJobService;
+import com.mahmoudbahaa.wallet.services.BackUpNowJobFireBase;
+import com.mahmoudbahaa.wallet.services.BackUpService;
+import com.mahmoudbahaa.wallet.services.SyncDataService;
+import com.mahmoudbahaa.wallet.services.BackUpJobFirebase;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
 import com.firebase.jobdispatcher.GooglePlayDriver;

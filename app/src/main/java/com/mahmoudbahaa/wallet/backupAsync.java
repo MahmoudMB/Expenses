@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 /**
  * Created by MahmoudBahaa on 20/01/2019.

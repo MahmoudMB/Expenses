@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

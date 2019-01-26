@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.example.mahmoudbahaa.expenses"
+        applicationId "com.example.expenses"
         minSdkVersion 18
         targetSdkVersion 27
         versionCode 1
@@ -35,6 +35,7 @@ dependencies {
 
 
     implementation 'com.jakewharton:butterknife:8.8.1'
+    // implementation 'com.android.support.constraint:constraint-layout:1.1.3'  //delete
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
@@ -51,7 +52,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
 
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
+    // debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'   //delete
     def lifecycle_version = "1.1.1"
 
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
@@ -59,7 +60,8 @@ dependencies {
 
 
     implementation 'net.danlew:android.joda:2.10.1.1'
-
+    implementation 'id.zelory:compressor:2.1.0'
+    implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
 
 }
 apply plugin: 'com.google.gms.google-services'

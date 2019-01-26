@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses.data;
+package com.mahmoudbahaa.wallet.data;
 
 import java.util.Date;
 

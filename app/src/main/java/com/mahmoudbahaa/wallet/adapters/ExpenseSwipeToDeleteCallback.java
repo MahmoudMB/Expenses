@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses.adapters;
+package com.mahmoudbahaa.wallet.adapters;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,7 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
-import com.mahmoudbahaa.expenses.R;
+import com.mahmoudbahaa.wallet.R;
 
 /**
  * Created by MahmoudBahaa on 23/01/2019.

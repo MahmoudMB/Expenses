@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.app.Activity;
 import android.arch.lifecycle.LiveData;
@@ -11,9 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
-import com.mahmoudbahaa.expenses.adapters.CategoryAdapter;
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Category;
+import com.mahmoudbahaa.wallet.adapters.CategoryAdapter;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Category;
 
 import java.util.ArrayList;
 import java.util.List;

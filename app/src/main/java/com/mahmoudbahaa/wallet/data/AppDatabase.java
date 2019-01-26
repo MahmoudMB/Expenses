@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses.data;
+package com.mahmoudbahaa.wallet.data;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -7,16 +7,16 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.util.Log;
 
-import com.mahmoudbahaa.expenses.models.Account;
-import com.mahmoudbahaa.expenses.models.AccountDao;
-import com.mahmoudbahaa.expenses.models.Category;
-import com.mahmoudbahaa.expenses.models.CategoryDao;
-import com.mahmoudbahaa.expenses.models.Expense;
-import com.mahmoudbahaa.expenses.models.ExpenseDao;
-import com.mahmoudbahaa.expenses.models.Sequence;
-import com.mahmoudbahaa.expenses.models.SequenceDao;
-import com.mahmoudbahaa.expenses.models.Sync;
-import com.mahmoudbahaa.expenses.models.SyncDao;
+import com.mahmoudbahaa.wallet.models.Account;
+import com.mahmoudbahaa.wallet.models.AccountDao;
+import com.mahmoudbahaa.wallet.models.Category;
+import com.mahmoudbahaa.wallet.models.CategoryDao;
+import com.mahmoudbahaa.wallet.models.Expense;
+import com.mahmoudbahaa.wallet.models.ExpenseDao;
+import com.mahmoudbahaa.wallet.models.Sequence;
+import com.mahmoudbahaa.wallet.models.SequenceDao;
+import com.mahmoudbahaa.wallet.models.Sync;
+import com.mahmoudbahaa.wallet.models.SyncDao;
 
 
 /**

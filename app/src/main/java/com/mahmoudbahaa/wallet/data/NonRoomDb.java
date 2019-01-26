@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses.data;
+package com.mahmoudbahaa.wallet.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

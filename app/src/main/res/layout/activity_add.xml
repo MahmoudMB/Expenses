@@ -8,7 +8,7 @@
     android:layoutDirection="rtl"
     android:textDirection="rtl"
     android:background="@color/white"
-    tools:context="com.example.mahmoudbahaa.expenses.AddActivity">
+    tools:context="com.mahmoudbahaa.wallet.AddActivity">
 
 
 <LinearLayout
@@ -130,7 +130,7 @@ android:background="#ff7364"
             android:hint="الوصف"
             android:textSize="30sp"
             android:textAlignment="center"
-            android:textColor="#717171"
+            android:textColor="#FFFFFFFF"
             android:background="@android:color/transparent"
             android:inputType="text|textNoSuggestions"
             />
@@ -145,7 +145,7 @@ android:background="#ff7364"
             android:hint="المبلغ"
             android:textAlignment="center"
             android:textSize="30sp"
-            android:textColor="#717171"
+            android:textColor="#FFFFFFFF"
             android:inputType="number|textNoSuggestions"
             />
 

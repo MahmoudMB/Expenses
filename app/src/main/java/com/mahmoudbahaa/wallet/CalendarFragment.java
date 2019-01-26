@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,10 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.mahmoudbahaa.expenses.adapters.ExpenseAdapter;
-import com.mahmoudbahaa.expenses.adapters.ExpenseSwipeToDeleteCallback;
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Expense;
+import com.mahmoudbahaa.wallet.adapters.ExpenseAdapter;
+import com.mahmoudbahaa.wallet.adapters.ExpenseSwipeToDeleteCallback;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Expense;
 
 import java.util.ArrayList;
 import java.util.List;

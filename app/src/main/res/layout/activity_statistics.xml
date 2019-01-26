@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:layoutDirection="rtl"
-    tools:context="com.example.mahmoudbahaa.expenses.StatisticsFragment">
+    tools:context="com.mahmoudbahaa.wallet.StatisticsFragment">
 
 
     <LinearLayout
@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="جميع الحسابات"
-            android:textSize="19sp"
+            android:textSize="22sp"
             />
 
         <ImageView
@@ -41,6 +41,12 @@
 
     </LinearLayout>
 
+    <View
+        android:layout_below="@+id/Statistics_AccountSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/InActiveIcon"
+        ></View>
 
 
 <!--
@@ -68,7 +74,6 @@
 
 <LinearLayout
 
-    android:layout_marginTop="14dp"
     android:background="@color/white"
     android:layout_below="@+id/Statistics_AccountSpinner"
     android:id="@+id/ShowLastLayout"

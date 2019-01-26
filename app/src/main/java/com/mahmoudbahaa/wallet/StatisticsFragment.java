@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
@@ -21,10 +21,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mahmoudbahaa.expenses.adapters.AccountAdapter;
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Account;
-import com.mahmoudbahaa.expenses.models.Expense;
+import com.mahmoudbahaa.wallet.adapters.AccountAdapter;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Account;
+import com.mahmoudbahaa.wallet.models.Expense;
 import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;

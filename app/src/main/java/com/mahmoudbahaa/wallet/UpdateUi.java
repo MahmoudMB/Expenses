@@ -1,6 +1,6 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
-import com.mahmoudbahaa.expenses.models.Expense;
+import com.mahmoudbahaa.wallet.models.Expense;
 
 import java.util.List;
 

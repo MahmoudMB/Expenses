@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +10,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.EditText;
 
-import com.mahmoudbahaa.expenses.data.AppDatabase;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
 
 import org.json.JSONException;
 

@@ -2,31 +2,23 @@
 
 Expenses App.
 
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/main.jpg"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/1.png"/>
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/1.jpg"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/2.png"/>
-
-
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/3.png"/>
-
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/5.png"/>
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/2.jpg"/>
 
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/4.png"/>
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/3.jpg"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/6.png"/>
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/4.jpg"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/7.png"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/8.png"/>
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/5.jpg"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/9.png"/>
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/6.jpg"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/10.png"/>
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/7.jpg"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/11.png"/>
+<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/8.jpg"/>
 
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/12.png"/>
-
-<img src = "https://github.com/MahmoudMB/Expenses/blob/master/ScreenShot/13.png"/>

@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses.services;
+package com.mahmoudbahaa.wallet.services;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -6,12 +6,12 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Account;
-import com.mahmoudbahaa.expenses.models.Category;
-import com.mahmoudbahaa.expenses.models.Expense;
-import com.mahmoudbahaa.expenses.models.Sequence;
-import com.mahmoudbahaa.expenses.models.Sync;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Account;
+import com.mahmoudbahaa.wallet.models.Category;
+import com.mahmoudbahaa.wallet.models.Expense;
+import com.mahmoudbahaa.wallet.models.Sequence;
+import com.mahmoudbahaa.wallet.models.Sync;
 import com.firebase.jobdispatcher.JobParameters;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;

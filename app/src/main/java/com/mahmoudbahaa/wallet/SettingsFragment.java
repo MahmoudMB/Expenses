@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses;
+package com.mahmoudbahaa.wallet;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
@@ -15,10 +15,10 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Sync;
-import com.mahmoudbahaa.expenses.services.BackUpNowJobFireBase;
-import com.mahmoudbahaa.expenses.services.BackUpJobFirebase;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Sync;
+import com.mahmoudbahaa.wallet.services.BackUpNowJobFireBase;
+import com.mahmoudbahaa.wallet.services.BackUpJobFirebase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

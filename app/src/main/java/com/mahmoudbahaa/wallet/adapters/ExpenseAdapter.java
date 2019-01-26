@@ -1,4 +1,4 @@
-package com.mahmoudbahaa.expenses.adapters;
+package com.mahmoudbahaa.wallet.adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -11,15 +11,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mahmoudbahaa.expenses.AppExecutors;
-import com.mahmoudbahaa.expenses.data.AppDatabase;
-import com.mahmoudbahaa.expenses.models.Account;
-import com.mahmoudbahaa.expenses.models.Expense;
+import com.mahmoudbahaa.wallet.AppExecutors;
+import com.mahmoudbahaa.wallet.data.AppDatabase;
+import com.mahmoudbahaa.wallet.models.Account;
+import com.mahmoudbahaa.wallet.models.Expense;
 
 import java.util.Collections;
 import java.util.List;
 
-import com.mahmoudbahaa.expenses.R;
+import com.mahmoudbahaa.wallet.R;
 
 /**
  * Created by MahmoudBahaa on 11/01/2019.

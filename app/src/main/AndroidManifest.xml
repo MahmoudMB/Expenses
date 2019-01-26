@@ -1,49 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mahmoudbahaa.expenses">
+    package="com.mahmoudbahaa.wallet">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher1"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher1_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".AddActivity" />
-        <activity android:name=".SettingsActivity" />
+        <activity android:name="com.mahmoudbahaa.wallet.MainActivity" />
+        <activity android:name="com.mahmoudbahaa.wallet.AddActivity" />
+        <activity android:name="com.mahmoudbahaa.wallet.SettingsActivity" />
         <activity
-            android:name=".EditCategory"
+            android:name="com.mahmoudbahaa.wallet.EditCategory"
             android:label="@string/title_activity_edit_category" />
-        <activity android:name=".NewCategory" />
-        <activity android:name=".Addmemo" />
-        <activity android:name=".EditAccount" />
-        <activity android:name=".NewAccount" />
-        <activity android:name=".GeneralActivity" />
-        <activity android:name=".Login">
+        <activity android:name="com.mahmoudbahaa.wallet.NewCategory" />
+        <activity android:name="com.mahmoudbahaa.wallet.Addmemo" />
+        <activity android:name="com.mahmoudbahaa.wallet.EditAccount" />
+        <activity android:name="com.mahmoudbahaa.wallet.NewAccount" />
+        <activity android:name="com.mahmoudbahaa.wallet.GeneralActivity" />
+        <activity android:name="com.mahmoudbahaa.wallet.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Register" />
+        <activity android:name="com.mahmoudbahaa.wallet.Register" />
 
         <service
-            android:name=".BackUpService"
+            android:name="com.mahmoudbahaa.wallet.services.BackUpService"
             android:exported="false" />
         <service
-            android:name=".SyncDataService"
+            android:name="com.mahmoudbahaa.wallet.services.SyncDataService"
             android:exported="false" />
+        <service
+            android:name="com.mahmoudbahaa.wallet.services.BackUpJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.mahmoudbahaa.wallet.services.SyncNowJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="com.mahmoudbahaa.wallet.services.BacUpNowJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+            </intent-filter>
+        </service>
 
-        <activity android:name=".EditCategoryIncome" />
-        <activity android:name=".EditCategoryOutcome" />
-        <activity android:name=".EditCategories" />
-        <activity android:name=".SearchResults" />
-        <activity android:name=".EnlargeImage"></activity>
+        <activity android:name="com.mahmoudbahaa.wallet.EditCategoryIncome" />
+        <activity android:name="com.mahmoudbahaa.wallet.EditCategoryOutcome" />
+        <activity android:name="com.mahmoudbahaa.wallet.EditCategories" />
+        <activity android:name="com.mahmoudbahaa.wallet.SearchResults" />
+        <activity android:name="com.mahmoudbahaa.wallet.EnlargeImage" />
+        <activity
+            android:name="com.mahmoudbahaa.wallet.SignedUserSuggestion"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name="com.mahmoudbahaa.wallet.UnsignedUserSuggestion" />
+        <activity android:name="com.mahmoudbahaa.wallet.ResetPassword" />
+        <activity android:name="com.mahmoudbahaa.wallet.AboutActivity"></activity>
     </application>
 
 </manifest>
